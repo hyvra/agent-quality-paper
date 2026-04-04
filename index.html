@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Practitioner's Framework for Evaluating Production AI Agents</title>
+<meta name="description" content="75 Criteria Across 15 Dimensions, Grounded in How the Best Teams Ship. By Anna Hervey, April 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0e12;
+  --bg-elevated:#12151b;
+  --bg-card:#181c24;
+  --border:#1e2330;
+  --border-accent:#2a3040;
+  --text:#d4d8e0;
+  --text-dim:#7a8194;
+  --text-bright:#eef0f4;
+  --accent:#c4956a;
+  --accent-dim:#8a6a4a;
+  --accent-bright:#e4b88a;
+  --green:#6abf8a;
+  --green-dim:#2a4a3a;
+  --yellow:#d4b86a;
+  --yellow-dim:#4a3f2a;
+  --red:#bf6a6a;
+  --red-dim:#4a2a2a;
+  --blue:#6a9abf;
+  --serif:'Crimson Pro',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --max-w:820px;
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased}
+body{font-family:var(--serif);overflow-x:hidden}
+::selection{background:var(--accent-dim);color:var(--text-bright)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,14,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:transform .3s}
+nav.hidden{transform:translateY(-100%)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:.6rem 2rem;display:flex;align-items:center;gap:1.5rem;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-mark{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);flex-shrink:0;font-weight:500}
+.nav-links{display:flex;gap:.2rem;flex-shrink:0}
+.nav-links a{font-family:var(--sans);font-size:.65rem;color:var(--text-dim);text-decoration:none;padding:.35rem .65rem;border-radius:4px;white-space:nowrap;transition:all .2s;letter-spacing:.02em}
+.nav-links a:hover,.nav-links a.active{color:var(--text-bright);background:var(--bg-card)}
+
+/* HERO */
+.hero{min-height:80vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-20%;width:70vw;height:70vw;background:radial-gradient(circle,rgba(196,149,106,.06) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:var(--max-w);margin:0 auto;width:100%}
+.hero-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:.8rem}
+.hero-label::before{content:'';width:2rem;height:1px;background:var(--accent)}
+h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300;line-height:1.15;color:var(--text-bright);margin-bottom:1.5rem;letter-spacing:-.02em}
+.hero-sub{font-family:var(--serif);font-size:1.25rem;font-weight:300;color:var(--text-dim);font-style:italic;margin-bottom:3rem;max-width:600px}
+.hero-meta{display:flex;gap:2.5rem;font-family:var(--sans);font-size:.72rem;color:var(--text-dim)}
+.hero-meta dt{text-transform:uppercase;letter-spacing:.1em;font-size:.6rem;color:var(--accent-dim);margin-bottom:.2rem;font-weight:600}
+.hero-meta dd{color:var(--text)}
+
+/* CONTENT */
+.content{max-width:var(--max-w);margin:0 auto;padding:0 2rem 6rem}
+section{padding-top:5rem}
+h2{font-family:var(--serif);font-size:1.65rem;font-weight:400;color:var(--text-bright);margin-bottom:1.8rem;letter-spacing:-.01em;position:relative;padding-bottom:.8rem}
+h2::after{content:'';position:absolute;bottom:0;left:0;width:2.5rem;height:2px;background:var(--accent)}
+h3{font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--accent);margin:2.5rem 0 1rem;text-transform:uppercase;letter-spacing:.06em}
+h4{font-family:var(--sans);font-size:.8rem;font-weight:600;color:var(--text-bright);margin:1.5rem 0 .8rem}
+p{margin-bottom:1.3rem;font-weight:300}
+p strong{font-weight:600;color:var(--text-bright)}
+blockquote{border-left:2px solid var(--accent-dim);padding:.8rem 1.5rem;margin:1.5rem 0;background:var(--bg-elevated);border-radius:0 6px 6px 0;font-style:italic;color:var(--text-dim)}
+ul,ol{margin:0 0 1.3rem 1.2rem;font-weight:300}
+li{margin-bottom:.4rem}
+li strong{font-weight:500;color:var(--text-bright)}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+a:hover{border-bottom-color:var(--accent)}
+code{font-family:var(--mono);font-size:.78rem;background:var(--bg-elevated);padding:.15rem .4rem;border-radius:3px;color:var(--accent-bright)}
+pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;overflow-x:auto;margin:1.5rem 0;font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--text)}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;margin:1.5rem 0 2rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated)}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.72rem}
+thead{background:var(--bg-card)}
+th{padding:.7rem 1rem;text-align:left;font-weight:600;color:var(--text-bright);border-bottom:1px solid var(--border-accent);white-space:nowrap;font-size:.65rem;letter-spacing:.04em;text-transform:uppercase}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(196,149,106,.03)}
+.grade-a{color:var(--green);font-weight:700}
+.grade-b{color:var(--blue);font-weight:700}
+.grade-c{color:var(--yellow);font-weight:700}
+.grade-d{color:#bf8a6a;font-weight:700}
+.grade-f{color:var(--red);font-weight:700}
+td.num{font-family:var(--mono);font-size:.7rem;text-align:right}
+
+/* SCORE BAR */
+.score-bar{display:inline-block;height:6px;border-radius:3px;background:var(--border);width:60px;position:relative;vertical-align:middle;margin-left:.5rem}
+.score-bar .fill{position:absolute;left:0;top:0;height:100%;border-radius:3px;transition:width .6s ease}
+.fill-a{background:var(--green)}
+.fill-b{background:var(--blue)}
+.fill-c{background:var(--yellow)}
+.fill-d{background:#bf8a6a}
+.fill-f{background:var(--red)}
+
+/* CALLOUT */
+.callout{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.5rem 1.8rem;margin:2rem 0;font-size:.88rem}
+.callout-title{font-family:var(--sans);font-weight:600;color:var(--accent);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin:2rem 0}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;text-align:center}
+.stat-val{font-family:var(--mono);font-size:1.8rem;font-weight:300;color:var(--text-bright);line-height:1.2}
+.stat-label{font-family:var(--sans);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-top:.4rem}
+.stat-val.grade-d{color:#bf8a6a}
+.stat-val.grade-c{color:var(--yellow)}
+
+/* TOC */
+.toc{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:2rem 2.5rem;margin:3rem 0}
+.toc h3{margin-top:0;margin-bottom:1rem}
+.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+.toc li{counter-increment:toc;margin-bottom:.5rem}
+.toc li a{font-family:var(--sans);font-size:.78rem;color:var(--text-dim);display:flex;align-items:baseline;gap:.8rem;border-bottom:none;padding:.2rem 0;transition:color .2s}
+.toc li a::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:.65rem;color:var(--accent-dim);flex-shrink:0;min-width:1.5rem}
+.toc li a:hover{color:var(--text-bright)}
+.toc li a:hover::before{color:var(--accent)}
+
+/* DIMENSION DETAIL */
+.dim-header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.dim-weight{font-family:var(--mono);font-size:.7rem;color:var(--accent-dim);background:var(--bg-elevated);padding:.2rem .6rem;border-radius:4px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;font-family:var(--sans);font-size:.68rem;color:var(--text-dim)}
+
+/* ANIMATIONS */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  html{font-size:16px}
+  .hero{padding:6rem 1.2rem 3rem;min-height:auto}
+  .content{padding:0 1.2rem 4rem}
+  .hero-meta{flex-direction:column;gap:1rem}
+  .nav-inner{padding:.5rem 1rem}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .toc{padding:1.5rem}
+  th,td{padding:.5rem .6rem}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+<div class="nav-inner">
+  <span class="nav-mark">AH · 2026</span>
+  <div class="nav-links">
+    <a href="#abstract">Abstract</a>
+    <a href="#problem">Problem</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#rubric">Rubric</a>
+    <a href="#applied">Applied</a>
+    <a href="#design-decisions">Design</a>
+    <a href="#validation">Validation</a>
+    <a href="#novel">Novel</a>
+    <a href="#workflow">Workflow</a>
+    <a href="#limitations">Limitations</a>
+    <a href="#references">References</a>
+  </div>
+</div>
+</nav>
+
+<header class="hero">
+<div class="hero-inner fade-in">
+  <div class="hero-label">Research Paper</div>
+  <h1>A Practitioner's Framework for Evaluating Production&nbsp;AI&nbsp;Agents</h1>
+  <p class="hero-sub">75 Criteria Across 15 Dimensions, Grounded in How the Best Teams Ship</p>
+  <dl class="hero-meta">
+    <div><dt>Author</dt><dd>Anna Hervey</dd></div>
+    <div><dt>Date</dt><dd>April 2026</dd></div>
+    <div><dt>Dimensions</dt><dd>15</dd></div>
+    <div><dt>Criteria</dt><dd>75</dd></div>
+    <div><dt>Scale</dt><dd>270 points</dd></div>
+  </dl>
+</div>
+</header>
+
+<main class="content">
+
+<!-- ABSTRACT -->
+<section id="abstract" class="fade-in">
+<h2>Abstract</h2>
+<p>Most teams building AI agents evaluate quality by feel. They ship an agent, watch for complaints, and fix what breaks. This works until the agent fleet grows past three or four, at which point "it seems fine" stops scaling.</p>
+<p>I built a structured evaluation framework for a 7-agent document processing pipeline handling financial compliance data. The framework scores agents across 15 dimensions and 75 criteria on a 270-point scale. It draws on published methodologies from 15 companies — including Anthropic, OpenAI, Cursor, Stripe, Vercel, and Cognition — alongside 8 academic sources. When I applied it to my fleet, the baseline score was 117.8/200 (58.9%, Grade D). After one round of targeted improvements guided by the rubric's priority matrix, the estimated score rose to ~72.5%.</p>
+<p>This paper describes the methodology: why these 15 dimensions, how the scoring works, what I found when I applied it, and what the research says about the gaps most teams miss.</p>
+
+<div class="toc">
+<h3>Contents</h3>
+<ol>
+  <li><a href="#problem">The problem: agent quality is under-specified</a></li>
+  <li><a href="#methodology">Research methodology</a></li>
+  <li><a href="#rubric">The rubric: 15 dimensions, 75 criteria</a></li>
+  <li><a href="#applied">Applied: scoring a 7-agent financial pipeline</a></li>
+  <li><a href="#design-decisions">Design decisions and their rationale</a></li>
+  <li><a href="#validation">Rubric self-validation</a></li>
+  <li><a href="#novel">Novel contributions from industry research</a></li>
+  <li><a href="#workflow">Practical application: the scoring workflow</a></li>
+  <li><a href="#limitations">Limitations and future work</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+</div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="fade-in">
+<h2>The problem: agent quality is under-specified</h2>
+<p>Building an AI agent that works on a demo is straightforward. Building one that works reliably in production — on messy inputs, under load, across model updates — is a different problem entirely.</p>
+<p>The challenge is that "works" is under-specified. An agent can produce correct output while violating every policy in its prompt. It can pass a single-run eval while failing 75% of repeated runs on the same input. It can score well on hand-picked test cases while crashing on the first adversarial document it encounters in production.</p>
+<p>I encountered all of these failure modes while building a 7-agent pipeline for financial document processing. The pipeline handles tax forms, compliance documents, and client correspondence — domains where errors have real consequences. I needed a way to evaluate agent quality that was more rigorous than "the tests pass" but more practical than a 200-page academic assessment framework.</p>
+<p>What I found in the literature was surprisingly thin. There are excellent papers on individual aspects of agent evaluation — Anthropic's work on grader types, Galileo's data on multi-run reliability, the "Beyond Task Completion" framework for policy adherence. But nobody had assembled these into a single, weighted rubric that a practitioner could apply to a real fleet and get back actionable scores.</p>
+<p>So I built one.</p>
+</section>
+
+<!-- METHODOLOGY -->
+<section id="methodology" class="fade-in">
+<h2>Research methodology</h2>
+<p>The rubric is grounded in two research passes.</p>
+<h3>Pass 1: Academic and framework research</h3>
+<p>I surveyed 8 published sources covering agent evaluation theory:</p>
+<ul>
+  <li><strong>Anthropic,</strong> "Demystifying Evals for AI Agents" — capability vs. regression evals, Pass@k vs. Pass^k metrics, three grader types (code-based, model-based, human)</li>
+  <li><strong>Galileo,</strong> "Agent Evaluation Framework" — the finding that 60% single-run success drops to 25% across 8 runs, plus internal consistency measurement via Cronbach's alpha</li>
+  <li><strong>arxiv 2512.12791,</strong> "Beyond Task Completion" — the insight that agents can complete 100% of tasks while violating 67% of policies</li>
+  <li><strong>Stanford/CMU GPA Framework</strong> (arxiv 2510.08847) — Goal-Plan-Action alignment as a unified evaluation metric</li>
+  <li><strong>LangChain,</strong> "Agent Evaluation Readiness Checklist" — the principle that 20-50 hand-reviewed examples outperform hundreds of synthetic ones</li>
+  <li><strong>Inkeep</strong> Platform Rubric — multi-agent coordination scoring</li>
+  <li><strong>Microsoft Azure,</strong> "Top 5 Agent Observability Best Practices" — continuous evaluation and CI/CD integration</li>
+  <li><strong>Patronus AI,</strong> "TRAIL Benchmark" — trace-level agent evaluation where SOTA models score below 11%</li>
+</ul>
+
+<h3>Pass 2: Company methodology research</h3>
+<p>I studied how 15 specific companies evaluate their agents in production. Not what they publish about evaluation in general, but the specific tools, metrics, and workflows they use internally:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Company</th><th>Key technique extracted</th></tr></thead>
+<tbody>
+<tr><td><strong>Anthropic</strong></td><td>Bloom (generates eval suites from behavior descriptions), three-stage grading</td></tr>
+<tr><td><strong>OpenAI</strong></td><td>Two-stage grading (JSONL deterministic → model-assisted rubric), negative control prompts</td></tr>
+<tr><td><strong>Cursor</strong></td><td>Cursor Blame (mines git history to auto-generate eval datasets from real usage)</td></tr>
+<tr><td><strong>Cognition (Devin)</strong></td><td>TDD eval variant — providing unit tests alongside problem statements increased pass rate from 13.86% to 23%</td></tr>
+<tr><td><strong>Vercel (v0)</strong></td><td>Three-layer eval stack (code-based → LLM-based → human), 100% pass requirement on safety evals</td></tr>
+<tr><td><strong>Brex</strong></td><td>AI-on-AI QA at 100% coverage — AI agents QA other AI agents, humans focus on coaching</td></tr>
+<tr><td><strong>Stripe</strong></td><td>Agent trust scoring — separate fraud signal models for agent-initiated vs. human-initiated transactions</td></tr>
+<tr><td><strong>Google DeepMind</strong></td><td>Human-normalized cognitive scoring, FACTS benchmark suite</td></tr>
+<tr><td><strong>LangSmith</strong></td><td>Structured trace trees, offline + online evaluation</td></tr>
+<tr><td><strong>Braintrust</strong></td><td>CI/CD-native evaluation (GitHub Action), trajectory-level scoring</td></tr>
+<tr><td><strong>Patronus AI</strong></td><td>TRAIL benchmark, Percival AI debugger detecting 20+ failure modes in traces</td></tr>
+<tr><td><strong>Arize/Phoenix</strong></td><td>OpenTelemetry-native tracing, 10 span kinds for agent observability</td></tr>
+<tr><td><strong>Amazon</strong></td><td>Bedrock AgentCore Evaluations, system-level emergent behavior assessment</td></tr>
+<tr><td><strong>Weights & Biases</strong></td><td>Scorer-based evaluation with automatic versioning</td></tr>
+<tr><td><strong>Replit</strong></td><td>Self-testing debugging loops, extended autonomous operation</td></tr>
+</tbody>
+</table>
+</div>
+<p>Each technique was evaluated for whether it addressed a gap in the existing rubric. Eight techniques were incorporated as new criteria.</p>
+</section>
+
+<!-- RUBRIC -->
+<section id="rubric" class="fade-in">
+<h2>The rubric: 15 dimensions, 75 criteria</h2>
+<p>The rubric organizes agent quality into 15 scored dimensions, grouped into five tiers by weight.</p>
+
+<h3>Tier structure and weights</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tier</th><th>Dimensions</th><th style="text-align:right">Weight</th><th>Rationale</th></tr></thead>
+<tbody>
+<tr><td><strong>Eval & Quality Infrastructure</strong></td><td>Measurement & Calibration, Eval Infrastructure, Reliability & Consistency, Observability</td><td class="num">29%</td><td>Every top company invests most heavily here. Eval quality is the strongest predictor of long-term agent reliability.</td></tr>
+<tr><td><strong>Core Engineering</strong></td><td>Tool Design, Prompt Engineering</td><td class="num">20%</td><td>These determine whether the agent functions at all. Highest leverage for early-stage improvement.</td></tr>
+<tr><td><strong>Robustness</strong></td><td>Error Handling, Orchestration & Coordination, Policy Adherence</td><td class="num">20%</td><td>Production agents fail at boundaries — between agents, between expected and unexpected input, between policy and output.</td></tr>
+<tr><td><strong>Safety & Trust</strong></td><td>Human-in-the-Loop, Security & Trust Boundaries, Adversarial Robustness, State & Memory</td><td class="num">18%</td><td>The dimensions most teams skip. They determine whether you can operate the system safely.</td></tr>
+<tr><td><strong>Output Quality</strong></td><td>Output Schema, Context Management</td><td class="num">13%</td><td>Structural correctness of what agents produce and consume. Important but well-understood.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout">
+<div class="callout-title">Key design decision</div>
+The highest-weighted tier is <strong>Eval & Quality Infrastructure</strong>, not Core Engineering. Anthropic, OpenAI, Cursor, and Vercel all converge on the same conclusion: the quality of your evaluation infrastructure predicts agent reliability more strongly than the quality of your prompts or tools. A well-measured mediocre agent improves faster than an unmeasured excellent one.
+</div>
+
+<h3>Dimension overview</h3>
+<p>Each dimension contains 3–9 criteria scored 1–5. The weighted total maps to a 270-point scale.</p>
+
+<div class="dim-header"><h4>D1. Tool Design</h4><span class="dim-weight">10% · 27 pts</span></div>
+<p>6 criteria covering description clarity, semantic naming, consolidation ratio, error message actionability, token efficiency of returns, and idempotency documentation. Tool descriptions are the primary interface between the LLM and the outside world — a vague description creates unpredictable failure modes.</p>
+
+<div class="dim-header"><h4>D2. Prompt Engineering</h4><span class="dim-weight">10% · 27 pts</span></div>
+<p>7 criteria: architecture-task fit, reasoning pattern, role definition, stopping criteria, few-shot examples, constraint calibration, and dynamic prompt assembly. The DETAIL study showed that specificity improves accuracy from 0.34 to 0.81.</p>
+
+<div class="dim-header"><h4>D3. Output Schema</h4><span class="dim-weight">7% · 19 pts</span></div>
+<p>5 criteria: field constraints, field descriptions, failure mode surfacing, reasoning-structure separation, and validation pipeline. The most common production failure: agents returning <code>list[dict]</code> when typed Pydantic models existed but weren't used.</p>
+
+<div class="dim-header"><h4>D4. Context Management</h4><span class="dim-weight">6% · 16 pts</span></div>
+<p>4 criteria: token efficiency, progressive disclosure, compaction strategy, and system prompt structure. Informed by the IFScale finding that accuracy drops at 500+ instructions and the universal primacy/recency attention effect.</p>
+
+<div class="dim-header"><h4>D5. Error Handling</h4><span class="dim-weight">7% · 19 pts</span></div>
+<p>5 criteria: error classification, retry sophistication, graceful degradation, failure taxonomy, and escalation paths. At baseline, four of seven agents had <code>retries=0</code> — any structured output failure was a hard crash.</p>
+
+<div class="dim-header"><h4>D6a. Measurement & Calibration</h4><span class="dim-weight">6% · 16 pts</span></div>
+<p>4 criteria: confidence calibration evidence, metric selection, multi-run reliability (Pass^k), and grader calibration. The Galileo finding: agents at 60% single-run success drop to 25% across 8 runs. If you don't measure Pass^k, you don't know your actual reliability.</p>
+
+<div class="dim-header"><h4>D6b. Eval Infrastructure</h4><span class="dim-weight">9% · 24 pts</span></div>
+<p>6 criteria: capability vs. regression eval separation, eval dataset quality, production feedback loops, automated eval generation, TDD-style eval pairing, and two-stage grading pipelines. The highest-criteria dimension because the research strongly supports it.</p>
+
+<div class="callout">
+<div class="callout-title">Why D6 was split</div>
+D6a and D6b were originally a single dimension. I split them after a self-validation analysis predicted low Cronbach's alpha — the measurement-quality criteria and the infrastructure criteria were measuring different constructs.
+</div>
+
+<div class="dim-header"><h4>D7. Orchestration & Coordination</h4><span class="dim-weight">7% · 19 pts</span></div>
+<p>5 criteria: handoff protocol quality, data contract enforcement, failure propagation handling, DAG explicitness, and coordination overhead budget. Research shows 2–5× token cost multipliers and 100–500ms latency per agent handoff.</p>
+
+<div class="dim-header"><h4>D8. Human-in-the-Loop</h4><span class="dim-weight">6% · 16 pts</span></div>
+<p>5 criteria: review queue design, escalation clarity, override mechanisms, approval gate placement, and AI-on-AI QA coverage. The last criterion comes from Brex, where AI agents QA other AI agents at 100% coverage.</p>
+
+<div class="dim-header"><h4>D9. Observability & Debuggability</h4><span class="dim-weight">7% · 19 pts</span></div>
+<p>5 criteria: trace completeness, cost attribution, replay capability, trajectory quality scoring, and drift detection. Patronus's TRAIL benchmark found SOTA models score below 11% on trace-level evaluation.</p>
+
+<div class="dim-header"><h4>D10. Security & Trust Boundaries</h4><span class="dim-weight">4% · 11 pts</span></div>
+<p>3 criteria: prompt injection resistance, tool permission scoping, and PII handling. Weighted lowest because binary in nature — but they gate production deployment.</p>
+
+<div class="dim-header"><h4>D11. Reliability & Consistency</h4><span class="dim-weight">7% · 19 pts</span></div>
+<p>3 criteria: output determinism threshold, input sensitivity, and failure mode consistency. Measurement without enforcement is theater.</p>
+
+<div class="dim-header"><h4>D12. Policy Adherence</h4><span class="dim-weight">6% · 16 pts</span></div>
+<p>4 criteria: constraint compliance rate, verification step completion, boundary respect, and agent-initiated action trust signals. Agents can ace task completion while violating two-thirds of their constraints.</p>
+
+<div class="dim-header"><h4>D13. Adversarial Robustness</h4><span class="dim-weight">5% · 14 pts</span></div>
+<p>5 criteria: ambiguous input handling, adversarial document resistance, resource exhaustion handling, out-of-distribution input behavior, and negative control testing from OpenAI's practice.</p>
+
+<div class="dim-header"><h4>D14. State & Memory Management</h4><span class="dim-weight">3% · 8 pts</span></div>
+<p>3 criteria: retrieval accuracy, staleness detection, and state recovery. Separated from Context Management because Temporal-backed agents have distinct failure modes around state.</p>
+
+<h3>Scoring mechanics</h3>
+<p>Each criterion is scored 1–5 using behavioral anchors:</p>
+<ul>
+  <li><strong>1</strong> = absent or fundamentally broken</li>
+  <li><strong>3</strong> = present but incomplete or inconsistent</li>
+  <li><strong>5</strong> = comprehensive, tested, and production-hardened</li>
+</ul>
+<p>Weighted score formula: <code>SUM(dimension_avg / 5 × dimension_max_weighted_pts)</code></p>
+
+<h3>Grade bands</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Grade</th><th style="text-align:right">Score</th><th style="text-align:right">Percentage</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td class="grade-a">A</td><td class="num">230+</td><td class="num">85%+</td><td>Production-excellent</td></tr>
+<tr><td class="grade-b">B</td><td class="num">203–229</td><td class="num">75–84%</td><td>Production-ready with minor gaps</td></tr>
+<tr><td class="grade-c">C</td><td class="num">176–202</td><td class="num">65–74%</td><td>Functional but needs investment</td></tr>
+<tr><td class="grade-d">D</td><td class="num">149–175</td><td class="num">55–64%</td><td>Below production bar</td></tr>
+<tr><td class="grade-f">F</td><td class="num">&lt;149</td><td class="num">&lt;55%</td><td>Not production-viable</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- APPLIED -->
+<section id="applied" class="fade-in">
+<h2>Applied: scoring a 7-agent financial pipeline</h2>
+<p>The pipeline processes financial documents through seven sequential stages: boundary detection, classification, extraction, client profiling, gap analysis, remediation, and quality assurance. Each stage is a PydanticAI agent backed by Temporal for orchestration.</p>
+
+<h3>Baseline results</h3>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-val stat-val-fleet">117.8</div><div class="stat-label">Fleet Average / 200</div></div>
+  <div class="stat-card"><div class="stat-val grade-d">D</div><div class="stat-label">Fleet Grade</div></div>
+  <div class="stat-card"><div class="stat-val grade-c">140.8</div><div class="stat-label">Best: Extraction</div></div>
+  <div class="stat-card"><div class="stat-val grade-f">3 of 7</div><div class="stat-label">Agents at F</div></div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Dimension</th><th style="text-align:right">Weight</th><th class="num">boundary</th><th class="num">classif.</th><th class="num">extract.</th><th class="num">profiling</th><th class="num">gap</th><th class="num">remed.</th><th class="num">qa</th></tr></thead>
+<tbody>
+<tr><td>Tool Design</td><td class="num">15%</td><td class="num">3.0</td><td class="num">3.2</td><td class="num">3.7</td><td class="num">2.7</td><td class="num">2.8</td><td class="num">2.8</td><td class="num">3.2</td></tr>
+<tr><td>Prompt Engineering</td><td class="num">15%</td><td class="num">4.4</td><td class="num">4.4</td><td class="num">4.6</td><td class="num">4.1</td><td class="num">4.0</td><td class="num">3.9</td><td class="num">3.7</td></tr>
+<tr><td>Output Schema</td><td class="num">10%</td><td class="num">4.0</td><td class="num">4.2</td><td class="num">4.6</td><td class="num">2.8</td><td class="num">3.0</td><td class="num">2.4</td><td class="num">2.6</td></tr>
+<tr><td>Context Mgmt</td><td class="num">10%</td><td class="num">4.0</td><td class="num">4.3</td><td class="num">4.0</td><td class="num">3.8</td><td class="num">3.5</td><td class="num">3.5</td><td class="num">3.5</td></tr>
+<tr><td>Error Handling</td><td class="num">10%</td><td class="num">2.6</td><td class="num">2.8</td><td class="num">3.0</td><td class="num">1.8</td><td class="num">1.8</td><td class="num">1.6</td><td class="num">1.8</td></tr>
+<tr><td>Eval & Calibration</td><td class="num">10%</td><td class="num">1.5</td><td class="num">1.8</td><td class="num">1.8</td><td class="num">1.3</td><td class="num">1.3</td><td class="num">1.3</td><td class="num">1.3</td></tr>
+<tr><td>Orchestration</td><td class="num">10%</td><td class="num">3.0</td><td class="num">3.0</td><td class="num">3.3</td><td class="num">3.0</td><td class="num">3.0</td><td class="num">2.8</td><td class="num">3.3</td></tr>
+<tr><td>Human-in-Loop</td><td class="num">8%</td><td class="num">2.0</td><td class="num">2.5</td><td class="num">3.5</td><td class="num">2.0</td><td class="num">2.3</td><td class="num">2.8</td><td class="num">3.5</td></tr>
+<tr><td>Observability</td><td class="num">7%</td><td class="num">1.3</td><td class="num">1.3</td><td class="num">2.7</td><td class="num">1.3</td><td class="num">1.3</td><td class="num">2.3</td><td class="num">2.3</td></tr>
+<tr><td>Security</td><td class="num">5%</td><td class="num">2.7</td><td class="num">2.7</td><td class="num">2.7</td><td class="num">2.7</td><td class="num">2.7</td><td class="num">2.7</td><td class="num">2.7</td></tr>
+<tr style="background:var(--bg-card);font-weight:600"><td>Total / 200</td><td></td><td class="num">120.2</td><td class="num">127.0</td><td class="num">140.8</td><td class="num">107.0</td><td class="num">107.6</td><td class="num">107.4</td><td class="num">114.4</td></tr>
+<tr style="background:var(--bg-card)"><td>Grade</td><td></td><td class="num grade-d">D</td><td class="num grade-c">C</td><td class="num grade-c">C</td><td class="num grade-f">F</td><td class="num grade-f">F</td><td class="num grade-f">F</td><td class="num grade-d">D</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The scores revealed a clear pattern. Prompt engineering was strong across the fleet (average 4.2/5) — I had invested heavily in prompt design. But evaluation infrastructure was nearly absent (average 1.5/5), observability was minimal (average 1.8/5), and error handling was fragile (average 2.2/5).</p>
+
+<div class="callout">
+<div class="callout-title">Critical finding</div>
+Four of seven agents had <code>retries=0</code> and no output validators. A structured output failure in any of these agents meant a hard crash — no self-correction, no graceful degradation, no partial results. In a financial compliance pipeline, this is unacceptable.
+</div>
+
+<h3>Priority matrix</h3>
+<p>The rubric's improvement priority matrix multiplies each dimension's score gap by its weight to identify the highest-leverage improvements:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Priority</th><th>Dimension</th><th style="text-align:right">Gap × Weight</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Eval & Calibration</td><td class="num">0.250</td></tr>
+<tr><td>2</td><td>Error Handling</td><td class="num">0.230</td></tr>
+<tr><td>3</td><td>Tool Design</td><td class="num">0.210</td></tr>
+<tr><td>4</td><td>Observability</td><td class="num">0.154</td></tr>
+<tr><td>5</td><td>Output Schema</td><td class="num">0.130</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Round 1 improvements</h3>
+<p>Guided by the priority matrix, I executed targeted improvements:</p>
+<ol>
+  <li><strong>Output validators with retries</strong> — added <code>retries=1</code> and ModelRetry-based output validators to all 4 agents that had <code>retries=0</code></li>
+  <li><strong>Typed output models</strong> — replaced all <code>list[dict]</code> fields with proper Pydantic models (<code>DataConflict</code>, <code>MissingDocument</code>, <code>CheckResult</code>)</li>
+  <li><strong>Structured error handling</strong> — added <code>_tool_error</code> helper pattern to the 4 agents that lacked it</li>
+  <li><strong>Structured logging</strong> — added structlog to the 4 agents that had no structured logging</li>
+</ol>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-val stat-val-fleet">58.9%</div><div class="stat-label">Before</div></div>
+  <div class="stat-card"><div class="stat-val grade-c">72.5%</div><div class="stat-label">After Round 1</div></div>
+  <div class="stat-card"><div class="stat-val">D → C</div><div class="stat-label">Grade Change</div></div>
+  <div class="stat-card"><div class="stat-val">+27 pts</div><div class="stat-label">Score Delta</div></div>
+</div>
+
+<p>The key insight: the rubric didn't just tell me what was wrong — it told me <strong>what to fix first</strong>. Without the weighted priority matrix, I would have started with prompt engineering (already the strongest dimension) or security (low-weight, binary). The rubric directed attention to the highest-leverage gaps.</p>
+</section>
+
+<!-- DESIGN DECISIONS -->
+<section id="design-decisions" class="fade-in">
+<h2>Design decisions and their rationale</h2>
+
+<h3>Why 15 dimensions instead of 5–10</h3>
+<p>Most agent evaluation rubrics use 4–7 dimensions. Mine uses 15. The reason is discriminative power.</p>
+<p>A 5-dimension rubric produces scores that cluster — most agents score "medium" on most dimensions. A 15-dimension rubric with behavioral anchors produces scores with visible variance. My extraction agent scored 4.6 on output schema but 2.7 on observability. That spread is actionable. A collapsed score of "3.5 on quality" is not.</p>
+<p>The risk is scoring fatigue. I mitigate this with the Quick-Score Triage — a 5-minute, 10-question binary pass/fail gate that identifies agents not ready for full evaluation.</p>
+
+<h3>Why evaluation infrastructure is weighted highest</h3>
+<p>In the v1 rubric, I weighted tool design and prompt engineering highest (15% each). After the company methodology research, I restructured the weights to put eval infrastructure on top (29% combined).</p>
+<p>The evidence is consistent across every company I studied. Anthropic starts with 20 tasks and iterates. Cursor refreshes CursorBench quarterly from real usage. Vercel runs evals on every prompt iteration. Brex achieved 100% QA coverage via AI agents. The pattern: <strong>teams that invest in evaluation infrastructure ship better agents than teams that invest in prompt engineering.</strong></p>
+
+<h3>Why policy adherence is a separate dimension</h3>
+<p>The "Beyond Task Completion" paper presents a striking finding: agents can achieve 100% task completion while violating 67% of their stated policies. Task completion and policy compliance are independent axes. An agent that classifies documents correctly but skips mandatory verification steps is not safe to deploy in a compliance pipeline.</p>
+</section>
+
+<!-- VALIDATION -->
+<section id="validation" class="fade-in">
+<h2>Rubric self-validation</h2>
+<p>A rubric is only useful if it produces consistent, meaningful scores. I built three self-validation mechanisms into the framework.</p>
+
+<h4>Internal consistency (Cronbach's alpha)</h4>
+<p>For each dimension, criteria should correlate — they should measure the same underlying quality. The target is α ≥ 0.70 per dimension. The D6 split was a direct result of this analysis.</p>
+
+<h4>Inter-rater reliability</h4>
+<p>Two scorers evaluating the same agent should produce similar results. The target is Spearman ρ ≥ 0.80. Every criterion includes behavioral anchors (1/3/5 descriptions) and a "How to check" section to reduce subjective interpretation.</p>
+
+<h4>Saturation monitoring</h4>
+<p>A rubric that always produces the same scores has stopped providing useful signal. If 80%+ of agents score 4–5 on a criterion, the bar is too low. If scores haven't changed across three scoring rounds, the rubric needs harder anchors or new criteria.</p>
+</section>
+
+<!-- NOVEL CONTRIBUTIONS -->
+<section id="novel" class="fade-in">
+<h2>Novel contributions from industry research</h2>
+<p>Eight criteria in the rubric come directly from specific company practices that I haven't seen in any published evaluation framework:</p>
+
+<h4>Production feedback loops <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Cursor, Braintrust, Vercel</span></h4>
+<p>Cursor's "Cursor Blame" traces committed code back to the agent request that produced it, auto-generating eval datasets from real usage. Most teams build eval datasets once and never update them. The best teams feed production failures back into evals automatically.</p>
+
+<h4>Automated eval generation <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Anthropic</span></h4>
+<p>Anthropic's Bloom tool generates configurable eval suites from natural language behavior descriptions. Hand-crafting evals doesn't scale past a few dozen cases.</p>
+
+<h4>TDD-style eval pairing <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Cognition</span></h4>
+<p>Providing unit tests alongside problem statements increased Devin's SWE-bench pass rate from 13.86% to 23%. Pair every task with its expected output specification so the agent can self-verify during execution.</p>
+
+<h4>AI-on-AI QA coverage <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Brex</span></h4>
+<p>Brex uses AI agents to QA other AI agents at 100% coverage — not sampling. Human reviewers focus on calibrating the QA agents, not reviewing individual outputs.</p>
+
+<h4>Two-stage grading pipeline <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Anthropic, OpenAI, Vercel</span></h4>
+<p>Fast deterministic checks first (schema validation, format compliance), then nuanced model-based scoring. Stage 1 gates Stage 2 — no expensive model-based grading on structurally invalid output.</p>
+
+<h4>Agent-initiated action trust signals <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from Stripe</span></h4>
+<p>Stripe discovered that fraud signals calibrated for human traffic become unreliable for agent-initiated transactions. They're building entirely new signal models for agent traffic.</p>
+
+<h4>Negative control testing <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— from OpenAI</span></h4>
+<p>Deliberately testing that agent skills do NOT trigger on irrelevant prompts. Most eval suites only test positive cases.</p>
+
+<h4>Trajectory quality scoring <span style="color:var(--text-dim);font-weight:400;font-size:.72rem">— validated by Patronus</span></h4>
+<p>The TRAIL benchmark — the first benchmark for trace-level agent evaluation — found that SOTA models score below 11%. Evaluating the reasoning path, not just the final output, is a massive gap.</p>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow" class="fade-in">
+<h2>Practical application: the scoring workflow</h2>
+
+<h3>Quick-Score Triage (5 minutes)</h3>
+<p>Before the full evaluation, run 10 binary pass/fail checks on the most discriminating criteria: Does the agent have retries ≥ 1? Are all output fields typed? Is there structured logging? Does the prompt include at least one worked example? If fewer than 5 pass, fix fundamentals before investing in a full evaluation.</p>
+
+<h3>Full evaluation (60–90 minutes per agent)</h3>
+<p>Score dimensions in four phases:</p>
+<ol>
+  <li><strong>Foundation</strong> — Tool Design, Prompt Engineering, Output Schema. Visible from reading the code.</li>
+  <li><strong>Resilience</strong> — Error Handling, Reliability, Adversarial Robustness. Requires tracing error paths.</li>
+  <li><strong>Infrastructure</strong> — Measurement & Calibration, Eval Infrastructure, Observability, Context Management. Requires checking for eval suites and logging.</li>
+  <li><strong>System-level</strong> — Orchestration, Human-in-the-Loop, Policy Adherence, State Management, Security. Requires understanding the agent's pipeline role.</li>
+</ol>
+
+<h3>Resolving uncertainty</h3>
+<p>If evidence can't be found, score 1. The burden of proof is on the agent, not the scorer. If a criterion doesn't apply, score 3 (neutral) and note "N/A" in the justification.</p>
+</section>
+
+<!-- LIMITATIONS -->
+<section id="limitations" class="fade-in">
+<h2>Limitations and future work</h2>
+
+<p><strong>Single-pipeline validation.</strong> I've applied this framework to one pipeline (7 agents, financial compliance). The dimensions and weights may need adjustment for different domains — a conversational agent fleet would likely weight human-in-the-loop higher.</p>
+
+<p><strong>No inter-rater reliability data yet.</strong> The rubric is designed for inter-rater validation (behavioral anchors, "How to check" sections), but I haven't conducted a formal two-scorer comparison.</p>
+
+<p><strong>Aspirational criteria.</strong> Some criteria describe practices that few teams implement today. This is intentional — the rubric should pull quality forward. But it means most agents will score 1–2 on these criteria, compressing the effective scoring range.</p>
+
+<p><strong>Weight sensitivity.</strong> The tier weights are grounded in research but ultimately reflect my judgment. A team with different priorities might weight orchestration overhead higher. The framework supports re-weighting without changing criteria.</p>
+</section>
+
+<!-- CONCLUSION -->
+<section class="fade-in">
+<h2>Conclusion</h2>
+<p>Agent quality is a measurement problem before it is an engineering problem. You can't improve what you don't measure, and you can't measure what you haven't defined.</p>
+<p>This framework defines agent quality across 15 dimensions and 75 criteria, grounded in how the best teams in the industry actually evaluate their agents. It includes a scoring workflow, a quick-triage gate, and self-validation mechanisms. When applied to a real fleet, it produced actionable results — the priority matrix identified evaluation infrastructure, not prompt engineering, as the highest-leverage investment, which was counter-intuitive but correct.</p>
+<p>The rubric is a living artifact. The v2.1 iteration incorporated techniques from 15 companies that didn't exist in the v1 research base. As the field matures, the criteria will evolve — but the underlying principle won't: <strong>rigorous, systematic evaluation is the foundation of reliable agent systems.</strong></p>
+</section>
+
+<!-- REFERENCES -->
+<section id="references" class="fade-in">
+<h2>References</h2>
+
+<h3>Research papers and frameworks</h3>
+<ol>
+  <li>Anthropic. "Demystifying Evals for AI Agents." Anthropic Engineering Blog, 2025.</li>
+  <li>Galileo. "Agent Evaluation Framework: Metrics, Rubrics, and Benchmarks." 2026.</li>
+  <li>Li et al. "Beyond Task Completion: An Agent Assessment Framework." arXiv:2512.12791, 2025.</li>
+  <li>Zhang et al. "What Is Your Agent's GPA?" arXiv:2510.08847, Stanford/CMU, 2025.</li>
+  <li>LangChain. "Agent Evaluation Readiness Checklist." LangChain Blog, 2025.</li>
+  <li>Inkeep. "AI Agent Platform Evaluation Rubric." 2025.</li>
+  <li>Microsoft Azure. "Top 5 Agent Observability Best Practices for Reliable AI." Azure Blog, 2025.</li>
+  <li>Patronus AI. "TRAIL: Trace-Level Agent Evaluation Benchmark." 2026.</li>
+</ol>
+
+<h3>Company methodologies</h3>
+<ol start="9">
+  <li>OpenAI. "Testing Agent Skills with Evals." OpenAI Blog, 2025.</li>
+  <li>Cursor. "CursorBench." Cursor Blog, 2026.</li>
+  <li>Cognition. "Devin Annual Performance Review 2025." Cognition Blog, 2025.</li>
+  <li>Cognition. "SWE-bench Technical Report." Cognition Blog, 2024.</li>
+  <li>Vercel. "Eval-Driven Development: Build Better AI Faster." Vercel Blog, 2025.</li>
+  <li>Brex. "Agent + Human Ops at Brex." First Round Review, 2025.</li>
+  <li>Stripe. "Introducing Our Agentic Commerce Solutions." Stripe Blog, 2025.</li>
+  <li>Amazon. "Evaluating AI Agents: Real-World Lessons." AWS Machine Learning Blog, 2025.</li>
+  <li>Google DeepMind. "FACTS Benchmark Suite." DeepMind Blog, 2025.</li>
+  <li>Arize AI. "Phoenix: Open-Source AI Agent Observability." GitHub, 2025.</li>
+</ol>
+
+<h3>Background research</h3>
+<ol start="19">
+  <li>Zheng et al. "DETAIL: Task DEcomposition Into Atomic Levels." 2024.</li>
+  <li>Shinn et al. "Reflexion: Language Agents with Verbal Reinforcement Learning." NeurIPS 2023.</li>
+  <li>Chen et al. "MAST: Multi-Agent System Testing." 2024.</li>
+  <li>Wen et al. "IFScale: Instruction Following at Scale." 2024.</li>
+</ol>
+</section>
+
+</main>
+
+<footer>
+  <p>Anna Hervey · April 2026 · A Practitioner's Framework for Evaluating Production AI Agents</p>
+</footer>
+
+<script>
+// Scroll-triggered fade-ins
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+// Nav hide on scroll down, show on scroll up
+let lastY = 0;
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('hidden', y > lastY && y > 80);
+  lastY = y;
+}, { passive: true });
+
+// Active nav link
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => navObs.observe(s));
+</script>
+</body>
+</html>
