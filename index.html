@@ -132,6 +132,55 @@ td.num{font-family:var(--mono);font-size:.7rem;text-align:right}
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;font-family:var(--sans);font-size:.68rem;color:var(--text-dim)}
 
+/* FIGURES */
+.figure{margin:2.5rem 0}
+.fig-caption{font-family:var(--sans);font-size:.67rem;color:var(--text-dim);margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border);line-height:1.55;font-style:italic}
+.fig-caption strong{color:var(--text);font-style:normal;font-size:.65rem}
+
+/* HEATMAP */
+.heatmap-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated)}
+.heatmap{width:100%;border-collapse:collapse;font-family:var(--sans);min-width:580px}
+.heatmap thead th{padding:.5rem .65rem;font-size:.58rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);font-weight:500;text-align:center;border-bottom:1px solid var(--border-accent);background:var(--bg-card);white-space:nowrap}
+.heatmap thead th:first-child{text-align:left;min-width:140px}
+.heatmap tbody td:first-child{padding:.42rem .8rem;font-family:var(--sans);font-size:.7rem;color:var(--text);border-right:1px solid var(--border);background:var(--bg-elevated);white-space:nowrap}
+.hm-cell{padding:.42rem .65rem;font-family:var(--mono);font-size:.68rem;font-weight:600;text-align:center;transition:opacity .15s}
+.hm-cell:hover{opacity:.75}
+.heatmap tfoot td{padding:.5rem .65rem;font-family:var(--mono);font-size:.68rem;font-weight:600;text-align:center;border-top:2px solid var(--border-accent);background:var(--bg-card)}
+.heatmap tfoot td:first-child{font-family:var(--sans);font-size:.62rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);font-weight:500;text-align:left}
+.hm-legend{display:flex;align-items:center;gap:.75rem;font-family:var(--sans);font-size:.6rem;color:var(--text-dim);margin-top:.55rem}
+.hm-grad{height:7px;width:90px;border-radius:4px;background:linear-gradient(to right,rgba(191,74,74,.85),rgba(212,184,106,.85),rgba(106,191,138,.85))}
+
+/* PULL STAT */
+.pull-stat{display:flex;align-items:flex-start;gap:1.5rem;background:var(--bg-elevated);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.3rem 1.8rem;margin:2rem 0}
+.pull-stat-num{font-family:var(--mono);font-size:1.9rem;font-weight:300;color:var(--accent-bright);line-height:1;flex-shrink:0;padding-top:.1rem}
+.pull-stat-text{font-family:var(--serif);font-size:.92rem;color:var(--text);font-style:italic;line-height:1.5;margin-bottom:.3rem}
+.pull-stat-source{font-family:var(--sans);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim)}
+
+/* PIPELINE DIAGRAM */
+.pipeline{overflow-x:auto;margin:2rem 0}
+.pipeline-inner{display:flex;align-items:stretch;min-width:540px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.pipe-node{flex:1;background:var(--bg-card);border-right:1px solid var(--border);border-top:3px solid var(--border);padding:.8rem .4rem;text-align:center}
+.pipe-node:last-child{border-right:none}
+.pipe-node.gr-c{border-top-color:var(--yellow)}
+.pipe-node.gr-d{border-top-color:#bf8a6a}
+.pipe-node.gr-f{border-top-color:var(--red)}
+.pipe-name{font-family:var(--sans);font-size:.56rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--text-dim);margin-bottom:.4rem;line-height:1.3}
+.pipe-score{font-family:var(--mono);font-size:.85rem;color:var(--text-bright);display:block}
+.pipe-grade-label{font-family:var(--mono);font-size:.6rem;margin-top:.2rem;display:block}
+.pipe-grade-label.gr-c{color:var(--yellow)}
+.pipe-grade-label.gr-d{color:#bf8a6a}
+.pipe-grade-label.gr-f{color:var(--red)}
+
+/* PRIORITY BARS */
+.priority-chart{margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated);padding:1rem 1.2rem}
+.pcr{display:flex;align-items:center;gap:.85rem;padding:.35rem 0;border-bottom:1px solid var(--border)}
+.pcr:last-child{border-bottom:none}
+.pcr-rank{font-family:var(--mono);font-size:.62rem;color:var(--accent-dim);width:1rem;flex-shrink:0;text-align:right}
+.pcr-label{font-family:var(--sans);font-size:.68rem;color:var(--text);width:150px;flex-shrink:0}
+.pcr-track{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.pcr-fill{height:100%;border-radius:4px;background:linear-gradient(to right,var(--accent-dim),var(--accent-bright))}
+.pcr-val{font-family:var(--mono);font-size:.62rem;color:var(--accent);width:36px;text-align:right;flex-shrink:0}
+
 /* ANIMATIONS */
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
 .fade-in.visible{opacity:1;transform:translateY(0)}
@@ -219,6 +268,14 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
 <p>I encountered all of these failure modes while building a 7-agent pipeline for financial document processing. The pipeline handles tax forms, compliance documents, and client correspondence — domains where errors have real consequences. I needed a way to evaluate agent quality that was more rigorous than "the tests pass" but more practical than a 200-page academic assessment framework.</p>
 <p>What I found in the literature was surprisingly thin. There are excellent papers on individual aspects of agent evaluation — Anthropic's work on grader types, Galileo's data on multi-run reliability, the "Beyond Task Completion" framework for policy adherence. But nobody had assembled these into a single, weighted rubric that a practitioner could apply to a real fleet and get back actionable scores.</p>
 <p>So I built one.</p>
+
+<div class="pull-stat">
+  <div class="pull-stat-num">60% → 25%</div>
+  <div>
+    <div class="pull-stat-text">Agents rated at 60% single-run success fall to just 25% success across 8 repeated runs on identical inputs — the reliability gap most teams never measure.</div>
+    <div class="pull-stat-source">Galileo · Agent Evaluation Framework · 2026</div>
+  </div>
+</div>
 </section>
 
 <!-- METHODOLOGY -->
@@ -380,6 +437,43 @@ D6a and D6b were originally a single dimension. I split them after a self-valida
   <div class="stat-card"><div class="stat-val grade-f">3 of 7</div><div class="stat-label">Agents at F</div></div>
 </div>
 
+<div class="figure fade-in">
+<div class="heatmap-wrap">
+<table class="heatmap">
+<thead>
+  <tr>
+    <th>Dimension</th>
+    <th>Boundary</th><th>Classif.</th><th>Extract.</th><th>Profiling</th><th>Gap</th><th>Remed.</th><th>QA</th>
+  </tr>
+</thead>
+<tbody>
+  <tr><td>Tool Design</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="3.2">3.2</td><td class="hm-cell" data-score="3.7">3.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="3.2">3.2</td></tr>
+  <tr><td>Prompt Eng.</td><td class="hm-cell" data-score="4.4">4.4</td><td class="hm-cell" data-score="4.4">4.4</td><td class="hm-cell" data-score="4.6">4.6</td><td class="hm-cell" data-score="4.1">4.1</td><td class="hm-cell" data-score="4.0">4.0</td><td class="hm-cell" data-score="3.9">3.9</td><td class="hm-cell" data-score="3.7">3.7</td></tr>
+  <tr><td>Output Schema</td><td class="hm-cell" data-score="4.0">4.0</td><td class="hm-cell" data-score="4.2">4.2</td><td class="hm-cell" data-score="4.6">4.6</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="2.4">2.4</td><td class="hm-cell" data-score="2.6">2.6</td></tr>
+  <tr><td>Context Mgmt</td><td class="hm-cell" data-score="4.0">4.0</td><td class="hm-cell" data-score="4.3">4.3</td><td class="hm-cell" data-score="4.0">4.0</td><td class="hm-cell" data-score="3.8">3.8</td><td class="hm-cell" data-score="3.5">3.5</td><td class="hm-cell" data-score="3.5">3.5</td><td class="hm-cell" data-score="3.5">3.5</td></tr>
+  <tr><td>Error Handling</td><td class="hm-cell" data-score="2.6">2.6</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="1.8">1.8</td><td class="hm-cell" data-score="1.8">1.8</td><td class="hm-cell" data-score="1.6">1.6</td><td class="hm-cell" data-score="1.8">1.8</td></tr>
+  <tr><td>Eval &amp; Calib.</td><td class="hm-cell" data-score="1.5">1.5</td><td class="hm-cell" data-score="1.8">1.8</td><td class="hm-cell" data-score="1.8">1.8</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="1.3">1.3</td></tr>
+  <tr><td>Orchestration</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="3.3">3.3</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="3.0">3.0</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="3.3">3.3</td></tr>
+  <tr><td>Human-in-Loop</td><td class="hm-cell" data-score="2.0">2.0</td><td class="hm-cell" data-score="2.5">2.5</td><td class="hm-cell" data-score="3.5">3.5</td><td class="hm-cell" data-score="2.0">2.0</td><td class="hm-cell" data-score="2.3">2.3</td><td class="hm-cell" data-score="2.8">2.8</td><td class="hm-cell" data-score="3.5">3.5</td></tr>
+  <tr><td>Observability</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="1.3">1.3</td><td class="hm-cell" data-score="2.3">2.3</td><td class="hm-cell" data-score="2.3">2.3</td></tr>
+  <tr><td>Security</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td><td class="hm-cell" data-score="2.7">2.7</td></tr>
+</tbody>
+<tfoot>
+  <tr>
+    <td>Total / 200</td>
+    <td class="grade-d">120.2</td><td class="grade-c">127.0</td><td class="grade-c">140.8</td><td class="grade-f">107.0</td><td class="grade-f">107.6</td><td class="grade-f">107.4</td><td class="grade-d">114.4</td>
+  </tr>
+</tfoot>
+</table>
+</div>
+<div class="hm-legend">
+  <span>1 — Poor</span>
+  <div class="hm-grad"></div>
+  <span>5 — Excellent</span>
+</div>
+<p class="fig-caption"><strong>Figure 1.</strong> Per-dimension scores across all 7 agents (scores 1–5). Prompt engineering is the only consistently strong dimension (fleet avg 4.2). Eval &amp; Calibration and Observability are near-absent across the entire fleet. The Extraction agent is the clear outlier — it scores highest on 8 of 10 dimensions.</p>
+</div>
+
 <div class="table-wrap">
 <table>
 <thead><tr><th>Dimension</th><th style="text-align:right">Weight</th><th class="num">boundary</th><th class="num">classif.</th><th class="num">extract.</th><th class="num">profiling</th><th class="num">gap</th><th class="num">remed.</th><th class="num">qa</th></tr></thead>
@@ -422,6 +516,17 @@ Four of seven agents had <code>retries=0</code> and no output validators. A stru
 </table>
 </div>
 
+<div class="figure fade-in">
+<div class="priority-chart">
+  <div class="pcr"><span class="pcr-rank">1</span><span class="pcr-label">Eval &amp; Calibration</span><div class="pcr-track"><div class="pcr-fill" style="width:100%"></div></div><span class="pcr-val">0.250</span></div>
+  <div class="pcr"><span class="pcr-rank">2</span><span class="pcr-label">Error Handling</span><div class="pcr-track"><div class="pcr-fill" style="width:92%"></div></div><span class="pcr-val">0.230</span></div>
+  <div class="pcr"><span class="pcr-rank">3</span><span class="pcr-label">Tool Design</span><div class="pcr-track"><div class="pcr-fill" style="width:84%"></div></div><span class="pcr-val">0.210</span></div>
+  <div class="pcr"><span class="pcr-rank">4</span><span class="pcr-label">Observability</span><div class="pcr-track"><div class="pcr-fill" style="width:61.6%"></div></div><span class="pcr-val">0.154</span></div>
+  <div class="pcr"><span class="pcr-rank">5</span><span class="pcr-label">Output Schema</span><div class="pcr-track"><div class="pcr-fill" style="width:52%"></div></div><span class="pcr-val">0.130</span></div>
+</div>
+<p class="fig-caption"><strong>Figure 2.</strong> Improvement priority matrix — each dimension's score gap × its rubric weight. Eval &amp; Calibration and Error Handling together account for 48% of total improvable score. Prompt Engineering (the strongest dimension) does not appear in the top 5.</p>
+</div>
+
 <h3>Round 1 improvements</h3>
 <p>Guided by the priority matrix, I executed targeted improvements:</p>
 <ol>
@@ -436,6 +541,49 @@ Four of seven agents had <code>retries=0</code> and no output validators. A stru
   <div class="stat-card"><div class="stat-val grade-c">72.5%</div><div class="stat-label">After Round 1</div></div>
   <div class="stat-card"><div class="stat-val">D → C</div><div class="stat-label">Grade Change</div></div>
   <div class="stat-card"><div class="stat-val">+27 pts</div><div class="stat-label">Score Delta</div></div>
+</div>
+
+<div class="figure fade-in">
+<div class="pipeline">
+  <div class="pipeline-inner">
+    <div class="pipe-node gr-d">
+      <div class="pipe-name">Boundary<br>Detection</div>
+      <span class="pipe-score">120.2</span>
+      <span class="pipe-grade-label gr-d">Grade D</span>
+    </div>
+    <div class="pipe-node gr-c">
+      <div class="pipe-name">Classifi-<br>cation</div>
+      <span class="pipe-score">127.0</span>
+      <span class="pipe-grade-label gr-c">Grade C</span>
+    </div>
+    <div class="pipe-node gr-c">
+      <div class="pipe-name">Extraction</div>
+      <span class="pipe-score">140.8</span>
+      <span class="pipe-grade-label gr-c">Grade C</span>
+    </div>
+    <div class="pipe-node gr-f">
+      <div class="pipe-name">Client<br>Profiling</div>
+      <span class="pipe-score">107.0</span>
+      <span class="pipe-grade-label gr-f">Grade F</span>
+    </div>
+    <div class="pipe-node gr-f">
+      <div class="pipe-name">Gap<br>Analysis</div>
+      <span class="pipe-score">107.6</span>
+      <span class="pipe-grade-label gr-f">Grade F</span>
+    </div>
+    <div class="pipe-node gr-f">
+      <div class="pipe-name">Remedi-<br>ation</div>
+      <span class="pipe-score">107.4</span>
+      <span class="pipe-grade-label gr-f">Grade F</span>
+    </div>
+    <div class="pipe-node gr-d">
+      <div class="pipe-name">Quality<br>Assurance</div>
+      <span class="pipe-score">114.4</span>
+      <span class="pipe-grade-label gr-d">Grade D</span>
+    </div>
+  </div>
+</div>
+<p class="fig-caption"><strong>Figure 3.</strong> Baseline scores across the 7-agent pipeline (scores out of 200). The pipeline degrades sharply after Extraction — the three downstream agents (Profiling, Gap Analysis, Remediation) all fall below the production threshold. A weakness in any F-grade agent can silently corrupt output passed to the next stage.</p>
 </div>
 
 <p>The key insight: the rubric didn't just tell me what was wrong — it told me <strong>what to fix first</strong>. Without the weighted priority matrix, I would have started with prompt engineering (already the strongest dimension) or security (low-weight, binary). The rubric directed attention to the highest-leverage gaps.</p>
@@ -590,6 +738,32 @@ Four of seven agents had <code>retries=0</code> and no output validators. A stru
 </footer>
 
 <script>
+// Heatmap cell coloring
+(function() {
+  const stops = [
+    [1.0, [191, 74, 74]],
+    [2.0, [191, 116, 74]],
+    [3.0, [212, 184, 106]],
+    [4.0, [140, 191, 128]],
+    [5.0, [106, 191, 148]],
+  ];
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function scoreColor(score) {
+    let lo = stops[0], hi = stops[stops.length - 1];
+    for (let i = 0; i < stops.length - 1; i++) {
+      if (score >= stops[i][0] && score <= stops[i+1][0]) { lo = stops[i]; hi = stops[i+1]; break; }
+    }
+    const t = (score - lo[0]) / (hi[0] - lo[0]);
+    return [Math.round(lerp(lo[1][0], hi[1][0], t)), Math.round(lerp(lo[1][1], hi[1][1], t)), Math.round(lerp(lo[1][2], hi[1][2], t))];
+  }
+  document.querySelectorAll('.hm-cell').forEach(cell => {
+    const s = parseFloat(cell.dataset.score);
+    const [r, g, b] = scoreColor(s);
+    cell.style.background = `rgba(${r},${g},${b},0.18)`;
+    cell.style.color = `rgb(${r},${g},${b})`;
+  });
+})();
+
 // Scroll-triggered fade-ins
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
