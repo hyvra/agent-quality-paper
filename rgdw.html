@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research-Grounded Development — An Automated Evidence Pipeline for AI Agent Engineering</title>
+<meta name="description" content="A structural system that researches, adversarially challenges, fact-checks, and quality-gates every non-trivial engineering decision before the operator sees it. By Anna Hervey, April 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0e12;
+  --bg-elevated:#12151b;
+  --bg-card:#181c24;
+  --border:#1e2330;
+  --border-accent:#2a3040;
+  --text:#d4d8e0;
+  --text-dim:#7a8194;
+  --text-bright:#eef0f4;
+  --accent:#c4956a;
+  --accent-dim:#8a6a4a;
+  --accent-bright:#e4b88a;
+  --green:#6abf8a;
+  --green-dim:#2a4a3a;
+  --yellow:#d4b86a;
+  --yellow-dim:#4a3f2a;
+  --red:#bf6a6a;
+  --red-dim:#4a2a2a;
+  --blue:#6a9abf;
+  --nav-bg:rgba(12,14,18,.88);
+  --hero-glow:rgba(196,149,106,.06);
+  --row-hover:rgba(196,149,106,.03);
+  --serif:'Crimson Pro',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --max-w:820px;
+}
+[data-theme="light"]{
+  --bg:#faf7f0;
+  --bg-elevated:#f2ecdf;
+  --bg-card:#ebe3d2;
+  --border:#ddd3bf;
+  --border-accent:#c4b69a;
+  --text:#2d2721;
+  --text-dim:#6e6555;
+  --text-bright:#14100b;
+  --accent:#8a5a2a;
+  --accent-dim:#b08052;
+  --accent-bright:#6b4218;
+  --green:#3f6e52;
+  --green-dim:#c5ddcd;
+  --yellow:#8a6f28;
+  --yellow-dim:#e8dcb3;
+  --red:#8a3f3f;
+  --red-dim:#e8cdcd;
+  --blue:#2f5c78;
+  --nav-bg:rgba(250,247,240,.88);
+  --hero-glow:rgba(138,90,42,.08);
+  --row-hover:rgba(138,90,42,.04);
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased}
+body{font-family:var(--serif);overflow-x:hidden}
+::selection{background:var(--accent-dim);color:var(--text-bright)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:transform .3s,background .3s}
+nav.hidden{transform:translateY(-100%)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:.6rem 2rem;display:flex;align-items:center;gap:1.5rem;overflow-x:auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-mark{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);flex-shrink:0;font-weight:500}
+.nav-links{display:flex;gap:.2rem;flex-shrink:0}
+.nav-links a{font-family:var(--sans);font-size:.65rem;color:var(--text-dim);text-decoration:none;padding:.35rem .65rem;border-radius:4px;white-space:nowrap;transition:all .2s;letter-spacing:.02em}
+.nav-links a:hover,.nav-links a.active{color:var(--text-bright);background:var(--bg-card)}
+.nav-cross{font-family:var(--sans);font-size:.62rem;color:var(--accent);text-decoration:none;padding:.35rem .65rem;border:1px solid var(--border-accent);border-radius:4px;white-space:nowrap;flex-shrink:0;letter-spacing:.02em;margin-left:.5rem}
+.nav-cross:hover{background:var(--bg-card);border-color:var(--accent-dim)}
+.theme-toggle{background:transparent;border:1px solid var(--border-accent);color:var(--text-dim);font-family:var(--mono);font-size:.75rem;width:28px;height:26px;padding:0;border-radius:4px;cursor:pointer;flex-shrink:0;margin-left:auto;transition:color .2s,border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;line-height:1}
+.theme-toggle:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--bg-card)}
+
+/* HERO */
+.hero{min-height:80vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-20%;width:70vw;height:70vw;background:radial-gradient(circle,var(--hero-glow) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:var(--max-w);margin:0 auto;width:100%}
+.hero-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:.8rem}
+.hero-label::before{content:'';width:2rem;height:1px;background:var(--accent)}
+h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300;line-height:1.15;color:var(--text-bright);margin-bottom:1.5rem;letter-spacing:-.02em}
+.hero-sub{font-family:var(--serif);font-size:1.25rem;font-weight:300;color:var(--text-dim);font-style:italic;margin-bottom:3rem;max-width:600px}
+.hero-meta{display:flex;gap:2.5rem;font-family:var(--sans);font-size:.72rem;color:var(--text-dim);flex-wrap:wrap}
+.hero-meta dt{text-transform:uppercase;letter-spacing:.1em;font-size:.6rem;color:var(--accent-dim);margin-bottom:.2rem;font-weight:600}
+.hero-meta dd{color:var(--text)}
+
+/* CONTENT */
+.content{max-width:var(--max-w);margin:0 auto;padding:0 2rem 6rem}
+section{padding-top:5rem}
+h2{font-family:var(--serif);font-size:1.65rem;font-weight:400;color:var(--text-bright);margin-bottom:1.8rem;letter-spacing:-.01em;position:relative;padding-bottom:.8rem}
+h2::after{content:'';position:absolute;bottom:0;left:0;width:2.5rem;height:2px;background:var(--accent)}
+h3{font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--accent);margin:2.5rem 0 1rem;text-transform:uppercase;letter-spacing:.06em}
+h4{font-family:var(--sans);font-size:.8rem;font-weight:600;color:var(--text-bright);margin:1.5rem 0 .8rem}
+p{margin-bottom:1.3rem;font-weight:300}
+p strong{font-weight:600;color:var(--text-bright)}
+blockquote{border-left:2px solid var(--accent-dim);padding:.8rem 1.5rem;margin:1.5rem 0;background:var(--bg-elevated);border-radius:0 6px 6px 0;font-style:italic;color:var(--text-dim)}
+ul,ol{margin:0 0 1.3rem 1.2rem;font-weight:300}
+li{margin-bottom:.4rem}
+li strong{font-weight:500;color:var(--text-bright)}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+a:hover{border-bottom-color:var(--accent)}
+code{font-family:var(--mono);font-size:.78rem;background:var(--bg-elevated);padding:.15rem .4rem;border-radius:3px;color:var(--accent-bright)}
+pre{background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;overflow-x:auto;margin:1.5rem 0;font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--text)}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;margin:1.5rem 0 2rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated)}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.72rem}
+thead{background:var(--bg-card)}
+th{padding:.7rem 1rem;text-align:left;font-weight:600;color:var(--text-bright);border-bottom:1px solid var(--border-accent);white-space:nowrap;font-size:.65rem;letter-spacing:.04em;text-transform:uppercase}
+td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--row-hover)}
+
+/* CALLOUT */
+.callout{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.5rem 1.8rem;margin:2rem 0;font-size:.88rem}
+.callout-title{font-family:var(--sans);font-weight:600;color:var(--accent);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+
+/* TOC */
+.toc{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:2rem 2.5rem;margin:3rem 0}
+.toc h3{margin-top:0;margin-bottom:1rem}
+.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+.toc li{counter-increment:toc;margin-bottom:.5rem}
+.toc li a{font-family:var(--sans);font-size:.78rem;color:var(--text-dim);display:flex;align-items:baseline;gap:.8rem;border-bottom:none;padding:.2rem 0;transition:color .2s}
+.toc li a::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:.65rem;color:var(--accent-dim);flex-shrink:0;min-width:1.5rem}
+.toc li a:hover{color:var(--text-bright)}
+.toc li a:hover::before{color:var(--accent)}
+
+/* PULL STAT */
+.pull-stat{display:flex;align-items:flex-start;gap:1.5rem;background:var(--bg-elevated);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.3rem 1.8rem;margin:2rem 0}
+.pull-stat-num{font-family:var(--mono);font-size:1.9rem;font-weight:300;color:var(--accent-bright);line-height:1;flex-shrink:0;padding-top:.1rem}
+.pull-stat-text{font-family:var(--serif);font-size:.92rem;color:var(--text);font-style:italic;line-height:1.5;margin-bottom:.3rem}
+.pull-stat-source{font-family:var(--sans);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim)}
+
+/* FIGURES */
+.figure{margin:2.5rem 0}
+.fig-caption{font-family:var(--sans);font-size:.67rem;color:var(--text-dim);margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border);line-height:1.55;font-style:italic}
+.fig-caption strong{color:var(--text);font-style:normal;font-size:.65rem}
+
+/* TIER FLOW DIAGRAM (T1/T2/T3) */
+.tier-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.5rem 0}
+.tier-card{background:var(--bg-elevated);border:1px solid var(--border);border-top:3px solid var(--border-accent);border-radius:6px;padding:1.1rem 1.1rem 1.2rem}
+.tier-card.t1{border-top-color:var(--green)}
+.tier-card.t2{border-top-color:var(--yellow)}
+.tier-card.t3{border-top-color:var(--red)}
+.tier-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.3rem}
+.tier-label.t1{color:var(--green)}
+.tier-label.t2{color:var(--yellow)}
+.tier-label.t3{color:var(--red)}
+.tier-name{font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--text-bright);margin-bottom:.7rem}
+.tier-card ul{list-style:none;margin:0;padding:0;font-family:var(--sans);font-size:.62rem;color:var(--text-dim)}
+.tier-card li{margin-bottom:.3rem;padding-left:.7rem;position:relative;line-height:1.45}
+.tier-card li::before{content:'—';position:absolute;left:0;color:var(--accent-dim)}
+.tier-foot{font-family:var(--mono);font-size:.6rem;color:var(--accent);margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--border)}
+
+/* PIPELINE FLOW (vertical) */
+.vpipe{margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated);padding:1.4rem 1.4rem}
+.vpipe-row{display:flex;align-items:center;gap:1rem;padding:.6rem 0;border-bottom:1px dashed var(--border)}
+.vpipe-row:last-child{border-bottom:none}
+.vpipe-idx{font-family:var(--mono);font-size:.6rem;color:var(--accent-dim);width:1.8rem;flex-shrink:0}
+.vpipe-agent{font-family:var(--sans);font-size:.7rem;font-weight:600;color:var(--text-bright);min-width:130px;flex-shrink:0}
+.vpipe-action{font-family:var(--sans);font-size:.66rem;color:var(--text-dim);flex:1;line-height:1.45}
+.vpipe-time{font-family:var(--mono);font-size:.6rem;color:var(--accent);flex-shrink:0;white-space:nowrap}
+
+/* LOOP DIAGRAM */
+.loop{margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated);padding:1.3rem 1.5rem}
+.loop-step{display:flex;align-items:flex-start;gap:.9rem;padding:.55rem 0}
+.loop-step:not(:last-child){border-bottom:1px solid var(--border)}
+.loop-n{font-family:var(--mono);font-size:.7rem;font-weight:500;color:var(--accent);width:1.4rem;flex-shrink:0;line-height:1.5}
+.loop-body{flex:1;font-family:var(--sans);font-size:.68rem;color:var(--text);line-height:1.5}
+.loop-body strong{color:var(--text-bright);font-weight:600}
+.loop-body .c-high{color:var(--red);font-weight:600;font-family:var(--mono);font-size:.62rem}
+.loop-body .c-med{color:var(--yellow);font-weight:600;font-family:var(--mono);font-size:.62rem}
+.loop-body .c-low{color:var(--green);font-weight:600;font-family:var(--mono);font-size:.62rem}
+
+/* ER ANATOMY */
+.er-anatomy{margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;background:var(--bg-elevated);overflow:hidden}
+.er-row{display:grid;grid-template-columns:170px 1fr 80px;gap:1rem;padding:.55rem 1.2rem;border-bottom:1px solid var(--border);font-family:var(--sans);font-size:.65rem}
+.er-row:last-child{border-bottom:none}
+.er-row:hover{background:rgba(196,149,106,.03)}
+.er-field{color:var(--accent);font-family:var(--mono);font-weight:500}
+.er-desc{color:var(--text-dim);line-height:1.45}
+.er-tier{font-family:var(--mono);font-size:.56rem;text-align:right;text-transform:uppercase;letter-spacing:.04em}
+.er-tier.req{color:var(--red)}
+.er-tier.opt{color:var(--text-dim)}
+
+/* GATE MATRIX */
+.gate-matrix{margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg-elevated)}
+.gate-matrix table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.7rem}
+.gate-matrix th{padding:.6rem .8rem;text-align:center;font-size:.58rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);font-weight:600;background:var(--bg-card);border-bottom:1px solid var(--border-accent);white-space:nowrap}
+.gate-matrix th:first-child{text-align:left}
+.gate-matrix td{padding:.55rem .8rem;border-bottom:1px solid var(--border);color:var(--text);text-align:center;font-family:var(--mono);font-size:.65rem;font-weight:600}
+.gate-matrix td:first-child{text-align:left;font-family:var(--sans);font-weight:400;color:var(--text)}
+.gate-matrix tr:last-child td{border-bottom:none}
+.g-skip{color:var(--text-dim)}
+.g-warn{color:var(--yellow)}
+.g-block{color:var(--red)}
+
+/* BEFORE AFTER */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.ba-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.3rem}
+.ba-card.before{border-top:3px solid var(--red-dim)}
+.ba-card.after{border-top:3px solid var(--green-dim)}
+.ba-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem}
+.ba-label.before{color:var(--red)}
+.ba-label.after{color:var(--green)}
+.ba-card ul{list-style:none;margin:0;padding:0;font-family:var(--sans);font-size:.66rem;color:var(--text)}
+.ba-card li{padding:.3rem 0;border-bottom:1px solid var(--border);line-height:1.5}
+.ba-card li:last-child{border-bottom:none}
+
+/* KB ACCUMULATION */
+.kb-timeline{margin:1.5rem 0;padding:0;list-style:none}
+.kb-timeline li{display:flex;align-items:center;gap:1rem;padding:.7rem 1.1rem;background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;margin-bottom:.5rem;font-family:var(--sans);font-size:.68rem}
+.kb-proj{font-family:var(--mono);font-size:.62rem;color:var(--accent);min-width:85px;flex-shrink:0}
+.kb-count{font-family:var(--mono);font-size:.78rem;color:var(--text-bright);min-width:50px;text-align:right;flex-shrink:0}
+.kb-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.kb-fill{height:100%;background:linear-gradient(to right,var(--accent-dim),var(--accent-bright));border-radius:3px}
+.kb-stale{font-family:var(--mono);font-size:.56rem;color:var(--yellow);min-width:60px;text-align:right;flex-shrink:0}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;font-family:var(--sans);font-size:.68rem;color:var(--text-dim)}
+
+/* ANIMATIONS */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  html{font-size:16px}
+  .hero{padding:6rem 1.2rem 3rem;min-height:auto}
+  .content{padding:0 1.2rem 4rem}
+  .hero-meta{flex-direction:column;gap:1rem}
+  .nav-inner{padding:.5rem 1rem}
+  .toc{padding:1.5rem}
+  th,td{padding:.5rem .6rem}
+  .tier-flow{grid-template-columns:1fr}
+  .ba-grid{grid-template-columns:1fr}
+  .er-row{grid-template-columns:1fr;gap:.3rem}
+  .er-tier{text-align:left}
+  .vpipe-row{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+<div class="nav-inner">
+  <span class="nav-mark">AH · 2026</span>
+  <div class="nav-links">
+    <a href="#abstract">Abstract</a>
+    <a href="#problem">Problem</a>
+    <a href="#prior">Prior Work</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#integrity">Integrity</a>
+    <a href="#workflow">Workflow</a>
+    <a href="#walkthrough">Walkthrough</a>
+    <a href="#implementation">Implementation</a>
+    <a href="#limitations">Limitations</a>
+    <a href="#references">References</a>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◑</button>
+  <a href="index.html" class="nav-cross">← Eval Framework Paper</a>
+</div>
+</nav>
+
+<header class="hero">
+<div class="hero-inner fade-in">
+  <div class="hero-label">Research Paper · Companion</div>
+  <h1>Research-Grounded Development</h1>
+  <p class="hero-sub">An Automated Evidence Pipeline for AI Agent Engineering — how structural enforcement, adversarial proofing, and auto-revision loops produce defensible technical decisions without human research effort</p>
+  <dl class="hero-meta">
+    <div><dt>Author</dt><dd>Anna Hervey</dd></div>
+    <div><dt>Date</dt><dd>April 2026</dd></div>
+    <div><dt>Version</dt><dd>RGDW v2.1</dd></div>
+    <div><dt>Decision Tiers</dt><dd>3</dd></div>
+    <div><dt>Quality Gates</dt><dd>3</dd></div>
+    <div><dt>Pipeline Stages</dt><dd>8</dd></div>
+    <div><dt>Specs Implemented</dt><dd>6 / 6</dd></div>
+    <div><dt>Companion to</dt><dd><a href="index.html">Eval Framework</a></dd></div>
+  </dl>
+</div>
+</header>
+
+<main class="content">
+
+<!-- ABSTRACT -->
+<section id="abstract" class="fade-in">
+<h2>Abstract</h2>
+<p>Self-taught engineers building production AI systems face a structural asymmetry: their engineering skill outpaces their academic grounding. When a PhD reviewer asks <em>"why this approach?"</em>, a blog post and a weekend of intuition do not survive scrutiny. The standard response — promise to do more research next time — fails because discipline does not scale and because the engineer remains the bottleneck in their own quality loop.</p>
+<p>This paper presents the Research-Grounded Development Workflow (RGDW): a structural system in which a fleet of specialized agents classifies every non-trivial engineering decision, dispatches parallel research sprints, adversarially attacks its own recommendations, fact-checks load-bearing claims, and enforces quality gates before any output reaches the human operator. Evidence quality comes from architecture, not from willpower. The operator reviews conclusions, never the process.</p>
+<p>The system is grounded in a 93-job-description corpus showing research capability is table-stakes for AI agent engineering roles, a published methodology for evaluating production agents (companion paper), and empirical findings from multi-agent research pipelines at industry labs. Its core contribution is not any single technique but the combination of <strong>classifier–enforcer separation</strong>, <strong>pre-registered disconfirmation</strong>, <strong>red-team agents instantiated separately from the validators they attack</strong>, and <strong>auto-revision loops that resolve high-confidence attacks without human intervention</strong>. The result is an evidence trail that withstands expert scrutiny, produced automatically, on every decision that matters.</p>
+
+<div class="toc">
+<h3>Contents</h3>
+<ol>
+  <li><a href="#problem">The self-taught gap: why discipline is not enough</a></li>
+  <li><a href="#prior">Prior work: how others approach engineering decisions</a></li>
+  <li><a href="#architecture">The RGDW architecture</a></li>
+  <li><a href="#integrity">Structural integrity: why the system cannot be gamed</a></li>
+  <li><a href="#workflow">Integration with the engineering workflow</a></li>
+  <li><a href="#walkthrough">Walkthrough: a T3 orchestration-framework decision</a></li>
+  <li><a href="#implementation">Implementation: wiring RGDW into a live agent fleet</a></li>
+  <li><a href="#limitations">Limitations and future work</a></li>
+  <li><a href="#conclusion">Conclusion</a></li>
+  <li><a href="#references">References</a></li>
+</ol>
+</div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="fade-in">
+<h2>The self-taught gap: why discipline is not enough</h2>
+<p>Engineering skill and academic grounding are separable. An engineer can ship a working system without ever reading the paper that explains why their approach works — or fails. This asymmetry is invisible until the moment someone qualified asks <em>why</em>. At that moment, an evidence trail that does not exist cannot be summoned.</p>
+<p>A grounded-theory analysis of 93 job descriptions across 12 AI engineering organizations — Anthropic, OpenAI, Google DeepMind, Meta, Microsoft, Scale, Sierra, Cognition, Cursor, Databricks, Perplexity, Hugging Face — shows research capability is not an optional senior-level differentiator. It is explicitly required in 18 of the top 20 roles under terms like <em>"stay current on AI/ML research and tools,"</em> <em>"research and implement state-of-the-art using foundation models,"</em> and <em>"research cutting-edge algorithms for integration into the training stack."</em> Cross-functional communication roles add the converse requirement: defending technical choices in design reviews, customer conversations, and field-feedback reports back to Research and Product.</p>
+
+<div class="pull-stat">
+  <div class="pull-stat-num">18/20</div>
+  <div>
+    <div class="pull-stat-text">Of top-tier AI engineering roles explicitly require ongoing research capability — not as senior differentiation but as baseline responsibility. The gap is not the ability to build. It is the ability to defend why the build looks the way it does.</div>
+    <div class="pull-stat-source">93-JD corpus · 12 companies · grounded-theory coding · April 2026</div>
+  </div>
+</div>
+
+<p>The standard response to this gap is intention: <em>I will do more research next time.</em> Discipline-based solutions fail in practice for three reasons.</p>
+<p><strong>First, discipline does not scale with decision volume.</strong> A single engineer shipping a production agent makes dozens of T2-and-above decisions per week — framework choice, validation library, auth pattern, caching strategy, orchestration topology. Manual research at the required depth for even a third of these saturates the engineer's calendar and leaves no time to actually build.</p>
+<p><strong>Second, the engineer becomes the bottleneck in their own quality loop.</strong> A human-in-the-middle workflow — engineer researches, engineer judges, engineer decides — is the exact pattern that collapses under load. Decisions get made faster than research is done; the gap between stated process and actual process widens; the evidence trail quietly empties out.</p>
+<p><strong>Third, a single engineer cannot be their own red team.</strong> Confirmation bias is not a discipline problem — it is a cognitive default. Validating a recommendation and attacking it require different postures, and the same person holding both postures sequentially produces worse attacks than two separate parties.</p>
+<p>The RGDW treats these three failure modes as structural, not motivational. It solves them by delegating research, challenge, fact-checking, and gate enforcement to separate agents — each operating under constraints that prevent the cognitive collapse a solo human cannot avoid.</p>
+</section>
+
+<!-- PRIOR WORK -->
+<section id="prior" class="fade-in">
+<h2>Prior work: how others approach engineering decisions</h2>
+<p>Existing approaches to evidence-backed engineering decisions fall into four clusters. Each contributes a necessary component but none combine to produce an enforceable pipeline.</p>
+
+<h3>1 · Architectural decision records (ADRs)</h3>
+<p>ADRs — popularized by Nygard (2011) and refined across engineering org guidance from Google, Spotify, and ThoughtWorks — document the <em>what</em> and <em>why</em> of a decision at the moment it is made. They are narrative artifacts. Their strength is traceability: six months later, the team can reconstruct the reasoning. Their limitation is procedural: ADRs do not require research to have happened, do not classify source quality, and do not challenge the recommendation. An ADR citing a single vendor blog post is, structurally, as valid as one citing a meta-analysis.</p>
+
+<h3>2 · DORA research and documentation-driven engineering</h3>
+<p>The DORA program of research establishes that documentation quality correlates with delivery performance, and that written design docs are a signature of high-performing organizations. This validates <em>having</em> evidence trails but says nothing about how those evidence trails should be produced. It answers "does writing it down matter?" (yes) but not "what counts as sufficient evidence?"</p>
+
+<h3>3 · Academic systematic review methodology</h3>
+<p>PRISMA (Page et al., 2021), grounded theory (Strauss &amp; Corbin, 1998), and the broader systematic-review tradition in evidence-based medicine and social science prescribe rigorous research protocols: pre-registration of search strings, source classification, contradiction resolution, explicit exclusion criteria. These methods directly inspire RGDW's source-tier schema and pre-registered disconfirmation mechanics. Their limitation for engineering work is time-cost: a PRISMA-compliant systematic review takes weeks per question, which is incompatible with a shipping cadence measured in hours.</p>
+
+<h3>4 · Multi-agent research pipelines at industry labs</h3>
+<p>Published practitioner work on LLM-based research systems (Anthropic's multi-agent research architecture, 2025; published agent evaluation methodologies from industry labs) establishes that orchestrator-worker patterns with parallel subagent dispatch outperform single-agent research on complex queries, that <em>"detailed task descriptions prevent duplication"</em> across subagents, and that end-state evaluation is more tractable than per-step evaluation for stateful agents. Anthropic's reported finding — a multi-agent research system outperforming a single-agent baseline by 90.2% on internal evals, at 15× the token cost — is one of the more quantitatively clear signals that parallel decomposition matters for research quality.</p>
+<p>These works provide architecture patterns but not <em>engineering-decision</em> discipline: they describe research pipelines for answering user questions, not pipelines that gate-check their own outputs before an engineer commits code. The missing layer is adversarial proofing hooked directly into the development workflow.</p>
+
+<div class="callout">
+<div class="callout-title">The gap this paper addresses</div>
+No prior system combines: (1) automated research triggered by decision classification, (2) source-tier enforcement at the schema level, (3) adversarial red-team agents structurally separated from validators, (4) auto-revision loops that resolve high-confidence attacks, (5) fact-checking before delivery, and (6) BLOCK-level quality gates enforced by an agent other than the one that produced the recommendation. The RGDW does.
+</div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="fade-in">
+<h2>The RGDW architecture</h2>
+<p>The RGDW is an eight-stage pipeline executed by six specialized agents — architect, conductor, scout, deep-diver, synthesizer, eval-engineer — each with a bounded role and no permission to act outside it. The architecture's core property is <strong>structural separation between recommender and enforcer</strong>: no single agent can both produce a recommendation and approve its own gate.</p>
+
+<h3>3.1 · Decision classification</h3>
+<p>Every engineering decision is classified into one of three tiers by the architect agent. The classification determines whether research is required, how much time-box the research sprint gets, and which quality gates apply. The conductor agent — a different instance — enforces the classification by dispatching the corresponding pipeline. An architect cannot downgrade its own classification without conductor approval with documented rationale.</p>
+
+<div class="figure">
+<div class="tier-flow">
+  <div class="tier-card t1">
+    <div class="tier-label t1">Tier 1 · Routine</div>
+    <div class="tier-name">No research required</div>
+    <ul>
+      <li>Fully reversible in under 1 day</li>
+      <li>No new dependency</li>
+      <li>Pattern exists in codebase</li>
+      <li>Zero recurring cost</li>
+    </ul>
+    <div class="tier-foot">Time-box 0 · No gates</div>
+  </div>
+  <div class="tier-card t2">
+    <div class="tier-label t2">Tier 2 · Standard</div>
+    <div class="tier-name">Targeted research sprint</div>
+    <ul>
+      <li>New dependency added</li>
+      <li>Touches auth or data layer</li>
+      <li>Affects 3+ files</li>
+      <li>Partially reversible only</li>
+    </ul>
+    <div class="tier-foot">Time-box 2h · BLOCK Gate 2</div>
+  </div>
+  <div class="tier-card t3">
+    <div class="tier-label t3">Tier 3 · Critical</div>
+    <div class="tier-name">Full sprint + red team</div>
+    <ul>
+      <li>New recurring infrastructure cost</li>
+      <li>Irreversible at scale</li>
+      <li>Security-critical</li>
+      <li>Affects system topology</li>
+      <li>New domain to operator</li>
+    </ul>
+    <div class="tier-foot">Time-box 4.5h · BLOCK Gates 2 + 3</div>
+  </div>
+</div>
+<p class="fig-caption"><strong>Figure 1.</strong> Decision classification tiers. Any single criterion being true escalates the tier. The architect classifies, the conductor enforces, and downgrade requires documented rationale approved by the enforcer. When the operator enters a new domain, the first five decisions are automatically classified T3 regardless of other criteria — this forces the learning loop. After five completed T3 decisions in a domain, the tracker permits T2 classification for subsequent decisions that otherwise qualify.</p>
+</div>
+
+<h3>3.2 · Evidence Record schema</h3>
+<p>Every claim in the pipeline is captured as a structured Evidence Record (ER). The schema inherits directly from Step 3 of the parent research methodology and exists to make three properties machine-checkable: <em>is this claim traceable to a specific source?</em>, <em>what tier is that source?</em>, and <em>under what conditions does the claim hold?</em></p>
+
+<div class="figure">
+<div class="er-anatomy">
+  <div class="er-row"><div class="er-field">source_id</div><div class="er-desc">Author(s), Year, Venue or URL — fully attributable</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">source_tier</div><div class="er-desc">1 · 2 · practitioner · 3 — governs decision weight</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">source_type</div><div class="er-desc">primary-official · primary-independent · secondary-press · practitioner · vendor-claim · commentary</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">claim</div><div class="er-desc">Exact quoted finding with numbers — no paraphrase permitted</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">effect_size</div><div class="er-desc">Reported metric, or explicit "[NOT REPORTED]" marker</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">conditions</div><div class="er-desc">Stack, scale, domain — what context does this claim hold in?</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">limitations</div><div class="er-desc">Author-stated limits, or "[NONE STATED — assess independently]"</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">direction</div><div class="er-desc">supports · opposes · conditions the recommendation</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">confidence</div><div class="er-desc">high · medium · low in the finding as stated</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">conflict_of_interest</div><div class="er-desc">none · vendor · investor · competitor</div><div class="er-tier req">Required</div></div>
+  <div class="er-row"><div class="er-field">what_would_change_this</div><div class="er-desc">Falsifiability marker — what future event invalidates this claim?</div><div class="er-tier req">Required</div></div>
+</div>
+<p class="fig-caption"><strong>Figure 2.</strong> Evidence Record schema — every field required, no blanks permitted. If a field cannot be populated, the reason is stated explicitly (for example, "[NOT REPORTED — qualitative study]"). Vendor claims about the vendor's own product are never independent evidence and are tagged as such at the <code>conflict_of_interest</code> field. Practitioner tier evidence cannot be the sole basis for a T3 decision alone but two corroborating practitioner sources with consistent findings count as one Tier 2 equivalent.</p>
+</div>
+
+<h4>Source tier definitions</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tier</th><th>Definition</th><th>Decision weight</th></tr></thead>
+<tbody>
+<tr><td><strong>Tier 1</strong></td><td>Peer-reviewed papers (NeurIPS, ICML, ICLR, etc.), published benchmarks with documented methodology, meta-analyses</td><td>Full weight</td></tr>
+<tr><td><strong>Tier 2</strong></td><td>arXiv preprints ≥100 citations, industry-lab findings with disclosed methodology from labs at Anthropic, DeepMind, Meta, OpenAI, Microsoft Research</td><td>Full weight</td></tr>
+<tr><td><strong>Practitioner</strong></td><td>GitHub Issues with reproduction steps, high-vote Stack Overflow answers, independent developer benchmarks with methodology, migration reports with before/after metrics, HN threads &gt;50 points</td><td>Partial; two corroborating = one Tier 2 equivalent</td></tr>
+<tr><td><strong>Tier 3</strong></td><td>SDK documentation, engineering blogs, vendor marketing, standards documents</td><td>Context only, never decision weight</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>3.3 · Research sprint protocol</h3>
+<p>When the architect classifies a decision T2 or T3, the conductor dispatches a research sprint. The sprint is a choreographed sequence of scouting, validation, synthesis, red-teaming, revision, and fact-checking — each stage executed by a named agent with a bounded role. Scout agents run in parallel across source categories (academic, practitioner, vendor), deep-divers validate signals through a generate-critique-revise loop, and the synthesizer produces the Evidence Record package.</p>
+
+<div class="figure">
+<div class="vpipe">
+  <div class="vpipe-row"><div class="vpipe-idx">00</div><div class="vpipe-agent">Architect</div><div class="vpipe-action">Classify decision · pre-register disconfirming search strings</div><div class="vpipe-time">5m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">01</div><div class="vpipe-agent">Scout A</div><div class="vpipe-action">Academic sources — arXiv, peer-reviewed venues, published benchmarks</div><div class="vpipe-time">30–90m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">02</div><div class="vpipe-agent">Scout B</div><div class="vpipe-action">Practitioner sources — GitHub Issues, HN, migration reports, SO</div><div class="vpipe-time">30–90m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">03</div><div class="vpipe-agent">Scout C</div><div class="vpipe-action">Vendor sources — official docs, release history, contributor graphs</div><div class="vpipe-time">30–90m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">04</div><div class="vpipe-agent">Deep-diver</div><div class="vpipe-action">G-C-R validate each signal · build bull case then attack it</div><div class="vpipe-time">30–60m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">05</div><div class="vpipe-agent">Synthesizer</div><div class="vpipe-action">Check KB for prior ERs · rank evidence · produce ER package</div><div class="vpipe-time">20–30m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">06</div><div class="vpipe-agent">Red team</div><div class="vpipe-action">Receive ONLY the recommendation · attack it · rate confidence</div><div class="vpipe-time">15–30m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">07</div><div class="vpipe-agent">Synthesizer</div><div class="vpipe-action">Auto-revise if HIGH attack · incorporate MED as known risk</div><div class="vpipe-time">10–15m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">08</div><div class="vpipe-agent">Fact-check</div><div class="vpipe-action">Verify URLs resolve · numbers match · tiers correctly classified</div><div class="vpipe-time">10–15m</div></div>
+  <div class="vpipe-row"><div class="vpipe-idx">09</div><div class="vpipe-agent">Conductor</div><div class="vpipe-action">Run quality gates · BLOCK triggers auto-remediation · delivers to operator</div><div class="vpipe-time">5–10m</div></div>
+</div>
+<p class="fig-caption"><strong>Figure 3.</strong> Research sprint pipeline with T2/T3 time-boxes. Scouts execute in parallel (steps 01–03), as do late-stage scouts overlapping with early validation. Total automated pipeline time: ~2h for T2, ~4.5h for T3. The operator's involvement is bounded to the final review — all research, challenge, revision, and fact-checking happens upstream. Detailed task descriptions with explicit objectives, output formats, and source-category boundaries are assigned to each scout to prevent duplication — a failure mode documented in published multi-agent research pipelines where undifferentiated instructions led subagents to cover overlapping ground.</p>
+</div>
+
+<h4>Minimum source requirements</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tier</th><th>Min sources per option</th><th>Min Tier 1/2 sources</th></tr></thead>
+<tbody>
+<tr><td><strong>T2</strong></td><td>3</td><td>1 (or 2 corroborating practitioner = equivalent)</td></tr>
+<tr><td><strong>T3</strong></td><td>5</td><td>2 (practitioner evidence supplements, does not replace)</td></tr>
+</tbody>
+</table>
+</div>
+<p>If minimum source counts cannot be met within the time-box, the synthesizer tags the decision <code>[TIME-BOXED — below minimum]</code>, proceeds with best available evidence, and adds the gap to the research-debt backlog. No silent degradation is permitted.</p>
+</section>
+
+<!-- ADVERSARIAL PROOFING subsection continues architecture -->
+<section class="fade-in" style="padding-top:2rem">
+<h3>3.4 · Adversarial proofing pipeline</h3>
+<p>The adversarial proofing layer is the core differentiator. Every T2+ recommendation is attacked before it is delivered. The attack is not a stylistic check — it is a structurally separate agent tasked with destroying the recommendation using pre-registered disconfirming evidence it cannot know in advance.</p>
+
+<h4>Stage 1 · Pre-registered disconfirming search strings</h4>
+<p>Before scouting begins, the architect commits 3–5 search strings specifically designed to find evidence <em>against</em> each option. These strings are logged before results arrive and cannot be modified afterward. Scouts must execute them and report results, even when empty. This prevents post-hoc disconfirmation theater — the pattern where researchers invent weaker attack queries once they know what the winning option is.</p>
+
+<pre>"PydanticAI limitations" OR "PydanticAI problems" OR "PydanticAI production issues"
+"PydanticAI vs" AND ("regret" OR "switched away" OR "migration")
+"LangGraph complexity" OR "LangGraph debugging nightmare"
+"agent framework" AND ("regret" OR "switched from" OR "abandoned")</pre>
+
+<h4>Stage 2 · Red-team agent attack</h4>
+<p>A separate deep-diver instance — never the one that validated the supporting evidence — receives <em>only</em> the recommendation and its charter is to destroy it. The red-team agent searches for counterevidence, identifies failure conditions, proposes the strongest counterargument, and rates attack confidence HIGH / MEDIUM / LOW.</p>
+
+<h4>Stage 3 · Auto-revision loop</h4>
+<p>The critical architectural commitment: high-confidence attacks automatically revise the recommendation without human intervention.</p>
+
+<div class="figure">
+<div class="loop">
+  <div class="loop-step"><div class="loop-n">01</div><div class="loop-body"><strong>Red team attacks recommendation</strong> · produces structured report with attack confidence rating</div></div>
+  <div class="loop-step"><div class="loop-n">02</div><div class="loop-body">If rated <span class="c-high">HIGH</span> · synthesizer <strong>automatically revises</strong> recommendation incorporating counterevidence</div></div>
+  <div class="loop-step"><div class="loop-n">03</div><div class="loop-body">Revised recommendation goes back through red team · new attack pass · up to <strong>3 cycles</strong></div></div>
+  <div class="loop-step"><div class="loop-n">04</div><div class="loop-body">If still contested after 3 cycles · packaged as <code>outcome_type: contested</code> — both sides presented clearly</div></div>
+  <div class="loop-step"><div class="loop-n">05</div><div class="loop-body">If rated <span class="c-med">MEDIUM</span> · counterevidence included as <strong>"known risks"</strong> — recommendation stands but operator sees the failure modes</div></div>
+  <div class="loop-step"><div class="loop-n">06</div><div class="loop-body">If rated <span class="c-low">LOW</span> · recommendation stands clean</div></div>
+</div>
+<p class="fig-caption"><strong>Figure 4.</strong> Auto-revision loop. HIGH-confidence attacks that reach the operator have <em>already changed the recommendation</em> rather than being documented as unresolved risks. The 3-cycle cap prevents infinite loops and makes unresolved contests legible: a recommendation still contested after 3 revisions is a genuine uncertainty, not a workflow failure. The operator sees either a survived recommendation or a clearly-framed contested decision — never a raw battle-log to arbitrate manually.</p>
+</div>
+
+<h4>Stage 4 · Fact-check</h4>
+<p>Before delivery, the eval-engineer in verification mode spot-checks 3–5 load-bearing claims from the ER package: URLs resolve, quoted numbers match the actual source, tiers are classified correctly. If fabrication is detected — a hallucinated citation, a misquoted statistic, a misattributed source — the pipeline BLOCKS, removes the bad ER, and recycles. This is the fabrication firewall. Nothing false reaches the operator even when the upstream agents hallucinate.</p>
+
+<h3>3.5 · Quality gates</h3>
+<p>Gate enforcement is the structural commitment that distinguishes RGDW from advisory research protocols. Gates are enforced by the conductor — never the architect that produced the classification. No agent can override a BLOCK; only auto-remediation or the operator can clear one.</p>
+
+<div class="figure">
+<div class="gate-matrix">
+<table>
+<thead><tr><th>Gate</th><th>What it checks</th><th>T1</th><th>T2</th><th>T3</th></tr></thead>
+<tbody>
+<tr><td><strong>Gate 1 · Source Integrity</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">tier assigned · type classified · vendor claims attributed</span></td><td></td><td class="g-skip">skip</td><td class="g-warn">WARN</td><td class="g-block">BLOCK</td></tr>
+<tr><td><strong>Gate 2 · Evidence Sufficiency</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">min sources met · Tier 1/2 per option · pre-registered searches executed · falsifiability stated</span></td><td></td><td class="g-skip">skip</td><td class="g-block">BLOCK</td><td class="g-block">BLOCK</td></tr>
+<tr><td><strong>Gate 3 · Decision Quality</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">red team delivered · HIGH attacks auto-resolved · contradictions handled · fact-check passed</span></td><td></td><td class="g-skip">skip</td><td class="g-skip">skip</td><td class="g-block">BLOCK</td></tr>
+</tbody>
+</table>
+</div>
+<p class="fig-caption"><strong>Figure 5.</strong> Quality gate enforcement matrix. BLOCK means the pipeline cannot deliver to the operator until the gate passes. Failures trigger auto-remediation (pipeline cycles back to fix the deficiency), with escalation to the operator as <code>outcome_type: escalated</code> only after 3 failed remediation attempts. The separation of classifier (architect) from enforcer (conductor) prevents the failure mode where an agent resolves its own BLOCK by reclassifying the decision as trivial.</p>
+</div>
+
+<h3>3.6 · Knowledge base</h3>
+<p>Every completed decision persists to a Knowledge Base as a structured Evidence Record package. Subsequent decisions in the same domain check the KB before launching fresh research sprints. The KB is not a passive archive — it is staleness-aware, event-driven, and shared across projects.</p>
+
+<h4>Staleness model</h4>
+<p>Time-based staleness sets baseline expiration by evidence type — pricing claims expire at 90 days, API/SDK behavior at 180 days, architecture patterns at 365 days, peer-reviewed findings at 730 days. Event-driven invalidation supersedes time-based: a dependency major-version bump invalidates ERs citing that dependency; a published CVE invalidates security-critical claims immediately; a vendor acquisition invalidates vendor-claim ERs; and the operator's production experience contradicting an ER triggers manual re-research with the tag <code>contradicted_by_experience</code>.</p>
+
+<div class="figure">
+<ul class="kb-timeline">
+  <li>
+    <div class="kb-proj">ETZ</div>
+    <div style="flex:1"><strong style="color:var(--text-bright);font-size:.72rem">agent-orchestration</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">1 decision · T3 · tier-gated (need 5 for T2 downgrade)</span></div>
+    <div class="kb-bar"><div class="kb-fill" style="width:20%"></div></div>
+    <div class="kb-count">1/5</div>
+    <div class="kb-stale">fresh</div>
+  </li>
+  <li>
+    <div class="kb-proj">ETZ</div>
+    <div style="flex:1"><strong style="color:var(--text-bright);font-size:.72rem">document-extraction</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">3 decisions · T3 → T2 candidate at 5</span></div>
+    <div class="kb-bar"><div class="kb-fill" style="width:60%"></div></div>
+    <div class="kb-count">3/5</div>
+    <div class="kb-stale">fresh</div>
+  </li>
+  <li>
+    <div class="kb-proj">IH</div>
+    <div style="flex:1"><strong style="color:var(--text-bright);font-size:.72rem">frontend-frameworks</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">6 decisions · domain matured · cross-project reuse</span></div>
+    <div class="kb-bar"><div class="kb-fill" style="width:100%"></div></div>
+    <div class="kb-count">6/5</div>
+    <div class="kb-stale">2 stale</div>
+  </li>
+  <li>
+    <div class="kb-proj">SCU</div>
+    <div style="flex:1"><strong style="color:var(--text-bright);font-size:.72rem">auth-patterns</strong><br/><span style="font-family:var(--sans);font-size:.6rem;color:var(--text-dim)">4 decisions · security-critical domain · all T3</span></div>
+    <div class="kb-bar"><div class="kb-fill" style="width:80%"></div></div>
+    <div class="kb-count">4/5</div>
+    <div class="kb-stale">fresh</div>
+  </li>
+</ul>
+<p class="fig-caption"><strong>Figure 6.</strong> Knowledge base accumulation across projects. Domain expertise compounds automatically — the 10th project in a domain reuses ERs from the first nine without re-research. The progress bar tracks the 5-decision threshold that gates T3→T2 classification within a domain. Staleness indicators flag ERs requiring refresh sprints; events like dependency bumps or CVEs can invalidate entries immediately regardless of calendar age.</p>
+</div>
+
+<h4>KB reuse protocol</h4>
+<p>Before any research sprint: (1) check KB for existing ER on the topic; (2) if present and <code>status: active</code> and within staleness window, cite and proceed without re-research; (3) if present but stale, run a lighter refresh sprint that checks whether key claims still hold; (4) if absent, run the full research sprint. Cross-project reuse is first-class: an ER produced for Project A is valid for Project B as long as the claims still hold in B's context.</p>
+</section>
+
+<!-- STRUCTURAL INTEGRITY -->
+<section id="integrity" class="fade-in">
+<h2>Structural integrity: why the system cannot be gamed</h2>
+<p>The RGDW's claim to produce defensible evidence rests on structural properties, not on agent discipline. Seven commitments make the pipeline resistant to the failure modes that collapse discipline-based research protocols.</p>
+
+<ol>
+  <li><strong>Classifier and enforcer are different agents.</strong> The architect classifies; the conductor enforces. An agent that creates a BLOCK cannot clear it by reclassifying the decision as trivial — downgrades require explicit conductor approval with documented rationale.</li>
+  <li><strong>Red-team agent is a separate instance.</strong> The deep-diver that validates supporting evidence does not also attack it. A fresh instance receives only the recommendation. This prevents the cognitive trap where the validator's confirmation bias inherits into the attacker.</li>
+  <li><strong>Pre-registered search strings are committed before scouting.</strong> The architect locks in disconfirming queries before results arrive, making post-hoc theater — "we looked for counterevidence and happened not to find any" — detectable. Scouts must report results even when empty.</li>
+  <li><strong>Fact-check is a fabrication firewall.</strong> A separate eval-engineer instance verifies URLs, numbers, and source tiers before delivery. Even when an upstream agent hallucinates a citation, the firewall catches it. BLOCK on detection, recycle, deliver clean.</li>
+  <li><strong>Auto-revision changes recommendations, not just annotates them.</strong> HIGH-confidence attacks produce new recommendations, not warning labels on the old one. The operator does not arbitrate — the pipeline has already done so.</li>
+  <li><strong>Source tier enforcement is schema-level.</strong> An ER cannot exist without a tier. A T3 decision cannot pass Gate 2 without ≥2 Tier 1/2 sources. Weight is not optional honest behavior — it is a structural constraint in the data model.</li>
+  <li><strong>Event-driven invalidation prevents KB rot.</strong> Dependency bumps, CVEs, vendor pivots, and contradicting production experience all invalidate ERs without waiting for calendar-based staleness. The KB cannot silently decay into stale authority.</li>
+</ol>
+
+<p>The composite effect: an adversary — or a lazy version of the engineer — cannot force a weak recommendation through the pipeline by holding any single role. Every gate has a different enforcer, every recommendation has an attacker, and every load-bearing claim has a fact-checker.</p>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow" class="fade-in">
+<h2>Integration with the engineering workflow</h2>
+<p>The RGDW does not sit alongside the engineering workflow — it sits <em>inside</em> it. When the operator assigns a task, the conductor routes it and the architect decomposes it into decisions. T1 decisions proceed immediately with the agent's training knowledge. T2 and T3 decisions trigger the automated research pipeline, which runs in parallel with other work. The operator receives battle-tested recommendations asynchronously and reviews only the final output.</p>
+
+<div class="figure">
+<div class="ba-grid">
+  <div class="ba-card before">
+    <div class="ba-label before">Without RGDW</div>
+    <ul>
+      <li>5 min googling, 2 links opened</li>
+      <li>Decision made from vendor blog + one HN comment</li>
+      <li>No evidence trail recorded</li>
+      <li>Engineer cannot reconstruct reasoning 3 months later</li>
+      <li>Under expert scrutiny: no defense</li>
+      <li>Decision quality = engineer's current energy level</li>
+    </ul>
+  </div>
+  <div class="ba-card after">
+    <div class="ba-label after">With RGDW</div>
+    <ul>
+      <li>4.5h automated pipeline (engineer doing other work)</li>
+      <li>5–7 ERs across 5+ independent sources, tier-classified</li>
+      <li>Red-team attack resolved or documented as known risk</li>
+      <li>Fact-check confirms every URL, number, tier</li>
+      <li>Full evidence trail persisted to KB</li>
+      <li>Operator reviews conclusion for 5–10 min</li>
+    </ul>
+  </div>
+</div>
+<p class="fig-caption"><strong>Figure 7.</strong> Decision quality, before versus after RGDW. The axis of improvement is not speed — the pipeline is slower in clock time than a 5-minute search — it is defensibility, traceability, and cognitive load on the engineer. The engineer's active time drops to ~10 minutes per T3 decision; the evidence trail produced is citation-ready.</p>
+</div>
+
+<h3>Agent spec changes</h3>
+<p>Integration with the existing agent fleet requires four spec additions, each scoped to a single agent and a single responsibility.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Agent</th><th>Added responsibility</th></tr></thead>
+<tbody>
+<tr><td><strong>Architect</strong></td><td>Classify every T2+ decision using the reversibility/consequence matrix. Pre-register disconfirming searches before the sprint starts. Cite ERs in every spec. Cannot unilaterally downgrade a classification.</td></tr>
+<tr><td><strong>Conductor</strong></td><td>Enforce quality gates. Dispatch research sprints on T2+. Track classification accuracy, decision counts per domain, research debt. BLOCKs cannot be overridden by any agent — only auto-remediation or the operator.</td></tr>
+<tr><td><strong>Research Synthesizer</strong></td><td>Operate in Engineering Decision Mode. Output format is the Evidence Record schema. Check KB first. Apply contradiction resolution. Declare outcome type (recommended · least-bad · deferred · escalated · don't-build · split · contested).</td></tr>
+<tr><td><strong>Research Deep-diver</strong></td><td>Operate in Red Team Mode when dispatched as attacker. Receive only the recommendation, not supporting evidence. Produce structured attack report with HIGH/MED/LOW confidence rating. Must be a different instance from the validating deep-diver.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The builder agent — the one producing code — gets a lightweight addition: <em>if a spec cites an ER, do not deviate from the spec's approach without escalating.</em> This prevents the common failure where an implementer silently switches away from a researched decision during a mid-task struggle.</p>
+</section>
+
+<!-- WALKTHROUGH -->
+<section id="walkthrough" class="fade-in">
+<h2>Walkthrough: a T3 orchestration-framework decision</h2>
+<p>The following walkthrough traces a real T3 decision — selecting an agent orchestration framework for a production data-extraction pipeline — through the full RGDW. It is presented to make the abstract pipeline concrete.</p>
+
+<h3>Phase 0 · Classification (5 min)</h3>
+<p>The architect classifies the decision T3: it affects system topology, introduces new recurring infrastructure cost, and touches a domain the operator has limited production experience in. Pre-registered disconfirming searches are committed before scouting begins.</p>
+
+<h3>Phase 1 · Scouting (90 min, 3 scouts in parallel)</h3>
+<p>Scout A sweeps academic sources — arXiv papers on agent orchestration, published practitioner guidance on effective agent patterns. Scout B sweeps practitioner sources — GitHub Issues, migration reports, HN threads above 50 points, developer benchmarks. Scout C sweeps vendor documentation and official repositories, capturing contributor counts, release cadence, open-issue ratios.</p>
+
+<h3>Phase 2 · Validation (60 min)</h3>
+<p>The deep-diver runs Generate-Critique-Revise on each surviving signal. Published industry-lab guidance that <em>"the most successful implementations start with the simplest possible solution"</em> is captured as Tier 2 evidence supporting the raw-SDK option and opposing the heaviest framework. Conflict of interest is noted — the lab has incentive to recommend approaches using its SDK — and documented in the ER.</p>
+
+<h3>Phase 3 · Synthesis (30 min)</h3>
+<p>The synthesizer discovers a scope conflict: one cluster of evidence shows Framework X excels at structured I/O, another shows Framework Y excels at stateful graph workflows. Resolution: this is a scope conflict, not an evidence conflict. Under the current pipeline's needs — data extraction, simple chains — Framework X fits. Under future branching-workflow needs, Framework Y would fit. Outcome type: <code>recommended</code>.</p>
+
+<h3>Phase 4 · Red team (30 min)</h3>
+<p>A separate deep-diver instance receives only the recommendation. It finds three attack vectors: the smaller community around Framework X, practitioner debugging reports, no mature observability tool comparable to what Framework Y users rely on. Attack confidence: MEDIUM.</p>
+
+<h3>Phase 5 · Auto-revision (15 min)</h3>
+<p>MEDIUM confidence: no forced revision. The synthesizer incorporates the observability gap as a <em>known risk</em> in the recommendation, attached with the mitigation that OTEL instrumentation can close the gap with engineering effort.</p>
+
+<h3>Phase 6 · Fact-check (15 min)</h3>
+<p>The eval-engineer spot-checks four claims: published-guidance URL resolves (PASS), Framework X star count matches at time of check (PASS), cited CVE reference verified (PASS), benchmark number matches the source document (PASS). No fabrication detected.</p>
+
+<h3>Phase 7 · Gate check (10 min)</h3>
+<p>Gate 2: PASS (7 ERs, Tier 1/2 sources per option, pre-registered searches executed). Gate 3: PASS (red team delivered at MEDIUM, incorporated as known risks; fact-check clean). Delivery authorized.</p>
+
+<h3>Phase 8 · Final package delivered to operator</h3>
+<blockquote>
+<strong>Recommendation:</strong> Framework X for Phase 1.<br/>
+<strong>Why:</strong> Structured I/O focus matches current needs. Evidence: 7 ERs across 5 independent sources.<br/>
+<strong>Known risks:</strong> Observability gap (requires OTEL instrumentation). Smaller community. Migration path to Framework Y untested.<br/>
+<strong>Red team verdict:</strong> MEDIUM — recommendation survived. Observability gap is real but addressable.<br/>
+<strong>Revisit when:</strong> workflow needs branching within 90 days, or Framework X maintainer activity stalls.<br/>
+<strong>Full evidence trail:</strong> persisted to KB at the decision's canonical ID.
+</blockquote>
+
+<p>Total automated pipeline time: ~4 hours, run in parallel with other engineering work. Operator review time: 5–10 minutes. Evidence trail: citation-ready, defensible under expert scrutiny, persisted across projects.</p>
+</section>
+
+<!-- IMPLEMENTATION -->
+<section id="implementation" class="fade-in">
+<h2>Implementation: wiring RGDW into a live agent fleet</h2>
+<p>The RGDW specification was integrated into six live agent specs on 5 April 2026. Each spec received a bounded addition — a new section covering its RGDW responsibility — without modification to existing content. All six were then graded against the Hervey 2026 15-dimension framework. The RGDW additions improved every spec's score with zero regressions. Three of six entered the session below the B minimum (203/270) from pre-existing structural gaps; all three were brought to B minimum before the implementation was accepted.</p>
+
+<h3>7.1 · Spec quality outcomes</h3>
+<p>The additions are bounded and coherent: each agent received only the section covering its RGDW role. Architect received the decision classification protocol; conductor received gate enforcement and sprint dispatch; research-synthesizer received Engineering Decision Mode; research-deep-diver received Red Team Mode; eval-engineer received Fact Check Mode; builder received Evidence Awareness. No existing section in any spec was modified.</p>
+
+<div class="figure">
+<div class="table-wrap">
+<table>
+<thead><tr><th>Agent spec</th><th>RGDW section added</th><th>Final score</th><th>Grade</th><th>Score bar</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>research-deep-diver</strong></td>
+  <td>Red Team Mode</td>
+  <td class="num">238.9 / 270</td>
+  <td class="grade-a">A</td>
+  <td><span class="score-bar"><span class="fill fill-a" style="width:88.5%"></span></span></td>
+</tr>
+<tr>
+  <td><strong>research-synthesizer</strong></td>
+  <td>Engineering Decision Mode</td>
+  <td class="num">219.1 / 270</td>
+  <td class="grade-b">B</td>
+  <td><span class="score-bar"><span class="fill fill-b" style="width:81.1%"></span></span></td>
+</tr>
+<tr>
+  <td><strong>eval-engineer</strong></td>
+  <td>Fact Check Mode</td>
+  <td class="num">208.4 / 270</td>
+  <td class="grade-b">B</td>
+  <td><span class="score-bar"><span class="fill fill-b" style="width:77.2%"></span></span></td>
+</tr>
+<tr>
+  <td><strong>conductor</strong></td>
+  <td>RGDW Enforcement</td>
+  <td class="num">206.2 / 270</td>
+  <td class="grade-b">B</td>
+  <td><span class="score-bar"><span class="fill fill-b" style="width:76.4%"></span></span></td>
+</tr>
+<tr>
+  <td><strong>architect</strong></td>
+  <td>Research-Grounded Decision Protocol</td>
+  <td class="num">203.1 / 270</td>
+  <td class="grade-b">B</td>
+  <td><span class="score-bar"><span class="fill fill-b" style="width:75.2%"></span></span></td>
+</tr>
+<tr>
+  <td><strong>builder</strong></td>
+  <td>Evidence Awareness</td>
+  <td class="num">203.1 / 270</td>
+  <td class="grade-b">B</td>
+  <td><span class="score-bar"><span class="fill fill-b" style="width:75.2%"></span></span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="fig-caption"><strong>Figure 8.</strong> Post-implementation agent spec quality scores, Hervey 2026 15-dimension framework (270 points). B minimum is 203/270 (75.2%). The RGDW additions produced net improvements across all six specs with zero regressions. Architect and builder entered the session at D grade (161/270) from pre-existing gaps in eval infrastructure, trace schemas, and pass^k measurement — gaps unrelated to RGDW. All specs were brought to B minimum before the implementation was accepted as complete.</p>
+</div>
+
+<h3>7.2 · The improvement loop</h3>
+<p>Architect required five revision passes before clearing the B threshold; builder required three. The binding constraint in both was identical: no self-eval infrastructure. Neither spec had defined eval fixtures, trace schemas, or pass^k targets — the dimensions that distinguish a spec a fleet can improve from one that can only fail silently.</p>
+
+<div class="pull-stat">
+  <div class="pull-stat-num">5</div>
+  <div>
+    <div class="pull-stat-text">Targeted revision passes required to bring architect from D (161/270) to B (203.1/270). Each pass closed 40–60% of the remaining gap. A single comprehensive pass consistently scattered additions across too many dimensions without moving any single dimension to a passing score.</div>
+    <div class="pull-stat-source">April 2026 implementation · Hervey 2026 framework · Sonnet 4.6</div>
+  </div>
+</div>
+
+<p>The improvement pattern confirmed a structural observation: D-grade specs cannot be fixed in one pass. The eval framework's dimension weights mean that high-leverage gaps (D6b Eval Infrastructure, weight 9%) require specific additions — fixture sets, CI runners with assertion logic, dataset sourcing protocols — that are meaningless if written at too-high a level of generality. Targeted additions per dimension, graded after each pass, outperformed front-loaded comprehensive rewrites on every iteration.</p>
+
+<p>Eval-engineer presented a different failure mode: its raw score crossed B (205.1/270) after one revision pass, but a D15-RI C-cap held it at C grade. The cap triggers when fewer than four of eight D15-RI research-integrity criteria score ≥3, regardless of raw score. Eval-engineer's Fact Check Mode lacked disconfirmation documentation and falsifiability enforcement — the two criteria that make a verification report reproducible rather than opaque. Adding them lifted the cap and the grade in a single targeted pass.</p>
+
+<div class="callout">
+<div class="callout-title">What the implementation revealed about the fleet</div>
+The three D/C-grade specs were not failing because of RGDW. They were failing because the fleet had no standard for eval infrastructure. The implementation exposed a pre-existing fleet-wide gap: most agents lacked the self-measurement capability required to know whether they were degrading. The RGDW additions provided the trigger to address this — but the underlying problem predated the workflow.
+</div>
+
+<h3>7.3 · ETZ-001: the first live decision</h3>
+<p>An integration test dispatched the architect with a real T2 decision: should the ETZ compliance pipeline use Temporal Cloud or Prefect for workflow orchestration? The architect classified the decision T2 rather than T3. The rationale: prior domain research exists in the ETZRESEARCH knowledge base. The KB reuse protocol triggered on the first attempt — the operator entered an existing domain, not a new one, and the pipeline handled the distinction correctly without instruction.</p>
+
+<p>The synthesizer produced an ER package from five sources across practitioner and vendor-official tiers. The deciding factor was the durability model: Temporal replays exact workflow state via event sourcing; Prefect caches completed task results and re-runs from task boundaries. For compliance pipelines with 30–90 minute runs and human review gates, state-level replay holds. The red-team stage was skipped — T2 decisions do not require adversarial proofing under the tier rules — and Gate 2 passed on first check.</p>
+
+<blockquote>
+<strong>Recommendation:</strong> Temporal Cloud (Essentials).<br/>
+<strong>Why:</strong> State-level replay (event sourcing) matches compliance pipeline requirements. Evidence: 5 ERs across practitioner and official-documentation sources.<br/>
+<strong>Known risks:</strong> Temporal Cloud action count may exceed 1M/month under high signal volume; Essentials plan carries limited SLA; determinism constraint debugging requires understanding the replay model.<br/>
+<strong>Revisit when:</strong> actual cost exceeds $200/month for three consecutive months, or Prefect ships event-sourced execution, or ETZ pipeline simplifies to sub-5-minute runs.<br/>
+<strong>Full evidence trail:</strong> ETZ-001 · <code>~/BRAIN/reference/kb/decisions/ETZ-001.md</code>
+</blockquote>
+
+<p>Research surfaced a finding absent from the prior ETZRESEARCH domain map: PydanticAI v1 ships native <code>TemporalAgent</code> and <code>PrefectAgent</code> integrations. Neither the prior agent-orchestration domain research nor the original framework decision captured this. The KB was updated. It is the first instance of the system discovering new information in a domain the operator believed to be known — the precise failure mode the KB reuse protocol is designed to catch.</p>
+</section>
+
+<!-- LIMITATIONS -->
+<section id="limitations" class="fade-in">
+<h2>Limitations and future work</h2>
+<p>The RGDW is a production workflow, not a proven methodology. Six honest limitations bound its current claims.</p>
+
+<h3>Compute cost and time-cost</h3>
+<p>A T3 decision consumes ~4.5 hours of agent compute and an order of magnitude more tokens than an unaided decision. Published multi-agent research pipelines at industry labs report comparable overhead: roughly 15× the token usage of single-agent chat for equivalent queries, offset by a 90%+ improvement on research-eval tasks. Whether that tradeoff is worth it depends on the decision's irreversibility. For T3 decisions affecting system topology or security, yes. For T1 decisions, it would be indefensibly wasteful — which is why the classifier exists.</p>
+
+<h3>Source-tier ceiling</h3>
+<p>Most real engineering decisions lack Tier 1 evidence. Peer-reviewed studies comparing production frameworks in deployed contexts do not exist for most framework choices. Practitioner tier evidence — corroborated migration reports, benchmarks with disclosed methodology — partially fills the gap, but it is structurally weaker. A decision cited 90% from practitioner sources is more fragile than one grounded in peer-reviewed benchmarks. The schema surfaces this weakness; it cannot eliminate it.</p>
+
+<h3>LLM research agents have their own biases</h3>
+<p>Recall biases in search-indexed content, recency biases in training data, SEO-optimized farm content crowding out authoritative sources — these are documented failure modes of LLM-based research. Published post-mortems from multi-agent research pipelines note that early agents <em>"consistently chose SEO-optimized content farms over authoritative but less highly-ranked sources like academic PDFs."</em> RGDW's source-tier schema and fact-check firewall mitigate but do not eliminate this class of error.</p>
+
+<h3>The system accelerates expertise, not replaces it</h3>
+<p>Domain expertise comes from reviewing decisions, not from avoiding them. The auto-generated decision summaries persisted to the KB, and the domain-expertise tracker that gates the T3→T2 transition, are designed to compound learning — but the operator still has to read the summaries. A decision stack accumulated without review is not expertise; it is a queue of unread mail.</p>
+
+<h3>No formal evaluation of decision-quality improvement</h3>
+<p>The strongest claim the current work can make is qualitative: decisions produced through the RGDW carry evidence trails that survive expert scrutiny, and decisions made without the RGDW frequently do not. A before/after comparison with blinded evaluators rating decision quality — similar to the psychometric validation applied in the companion evaluation-framework paper — is open future work.</p>
+
+<h3>Dependency on specific infrastructure</h3>
+<p>The RGDW as implemented depends on a subagent orchestration environment with parallel dispatch, shared blackboard, and fact-check tooling. Porting it to other orchestration runtimes is possible but non-trivial, and the walkthrough's specific agent names and handoff conventions would not transfer directly. The methodology is portable; the specific implementation is not.</p>
+
+<h3>Future work</h3>
+<ol>
+  <li>Blind-evaluator study comparing RGDW-produced decisions to unaided decisions on defensibility, traceability, and correctness under domain-expert review</li>
+  <li>Cross-project KB reuse telemetry — measuring how often prior ERs short-circuit fresh research, and the decay rate of reuse across time</li>
+  <li>Red-team attack calibration — validating that HIGH/MEDIUM/LOW confidence ratings predict downstream decision reversals</li>
+  <li>Integration with eval frameworks from the companion paper so that production agent failures automatically invalidate the ERs that recommended the failing architecture</li>
+</ol>
+</section>
+
+<!-- CONCLUSION -->
+<section id="conclusion" class="fade-in">
+<h2>Conclusion</h2>
+<p>The self-taught gap is real, but it is not a discipline problem. Attempts to solve it with better intentions collapse under decision volume and confirmation bias. The RGDW's wager is that <strong>research quality comes from structure, not discipline</strong> — that adversarial agents, pre-registered searches, separate enforcers, and BLOCK-level gates produce better evidence trails than willpower ever could.</p>
+<p>The deeper insight is this: evidence trails are not just for defense. Bad ideas die in red team before they become code. A recommendation that has already survived a HIGH-confidence attack is a <em>better</em> recommendation, not just a more-documented one. The pipeline's output is not paperwork — it is architecturally-improved decisions.</p>
+<p>The agent fleet operating under RGDW constraints <em>is</em> the methodology in action. Every classification, every gate, every fact-check is executed by an agent with a bounded role and no permission to bypass. The operator reviews conclusions; the structure does the rest.</p>
+<p>For self-taught engineers building production AI systems, the question is no longer <em>"will I have time to do the research?"</em> It is <em>"does my workflow make research a bottleneck or a background process?"</em> The RGDW answers the second question structurally — and, in doing so, closes the gap between what a self-taught engineer can build and what they can defend.</p>
+</section>
+
+<!-- REFERENCES -->
+<section id="references" class="fade-in">
+<h2>References</h2>
+
+<h3>Primary data</h3>
+<ol>
+  <li>Hervey, A. "Responsibility Taxonomy — AI Agent Architect / Systems Engineer Roles." Primary data: 93+ job descriptions across 12 companies, grounded-theory coded per Strauss &amp; Corbin (1998). April 2026.</li>
+  <li>Hervey, A. "A Practitioner's Framework for Evaluating Production AI Agents." Companion paper. April 2026.</li>
+</ol>
+
+<h3>Multi-agent research systems &amp; engineering-decision architecture</h3>
+<ol start="3">
+  <li>Anthropic. "How We Built Our Multi-Agent Research System." Anthropic Engineering, June 2025.</li>
+  <li>Anthropic. "Building Effective AI Agents." Anthropic Engineering, December 2024.</li>
+  <li>Anthropic. "Effective Context Engineering for AI Agents." Anthropic Engineering, September 2025.</li>
+  <li>Anthropic. "Claude's Constitution." January 2026.</li>
+  <li>OpenAI. "A Practical Guide to Building Agents." April 2025.</li>
+  <li>Nygard, M. "Documenting Architecture Decisions." November 2011.</li>
+  <li>Forsgren, N., Humble, J. &amp; Kim, G. <em>Accelerate: The Science of Lean Software and DevOps</em>. IT Revolution, 2018. (DORA research program.)</li>
+</ol>
+
+<h3>Systematic review &amp; evidence methodology</h3>
+<ol start="10">
+  <li>Page, M.J. et al. "PRISMA 2020 Statement." <em>BMJ</em>, 372, 2021.</li>
+  <li>Strauss, A. &amp; Corbin, J. <em>Basics of Qualitative Research</em>, 2nd ed. Sage, 1998.</li>
+  <li>Messick, S. "Validity of Psychological Assessment." <em>American Psychologist</em> 50(9), 1995.</li>
+  <li>Cronbach, L.J. &amp; Meehl, P.E. "Construct Validity in Psychological Tests." <em>Psychological Bulletin</em> 52(4), 1955.</li>
+  <li>Lawshe, C.H. "A Quantitative Approach to Content Validity." <em>Personnel Psychology</em> 28(4), 1975.</li>
+</ol>
+
+<h3>Standards &amp; regulatory frameworks</h3>
+<ol start="15">
+  <li>NIST. "Artificial Intelligence Risk Management Framework (AI RMF 1.0)." NIST AI 100-1, January 2023.</li>
+  <li>European Union. "Regulation (EU) 2024/1689 (Artificial Intelligence Act)." 2024.</li>
+</ol>
+
+<h3>Empirical findings on multi-agent systems</h3>
+<ol start="17">
+  <li>Kim, Y. et al. "Towards a Science of Scaling Agent Systems." arXiv:2512.08296, December 2025.</li>
+  <li>Cemri, M. et al. "Multi-Agent System Failure Taxonomy (MAST)." NeurIPS 2025 Spotlight, 2025.</li>
+  <li>Rabanser, S. et al. "AI Agent Reliability." Princeton, arXiv, 2026.</li>
+  <li>Yao, S. et al. "τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains." Sierra Research, arXiv:2406.12045, 2024.</li>
+  <li>Cao, H. et al. "Beyond Task Completion: Revealing Corrupt Success in LLM Agents." arXiv:2603.03116, March 2026.</li>
+</ol>
+
+</section>
+
+
+
+
+
+
+</main>
+<footer><p>Anna Hervey · April 2026 · Research-Grounded Development</p></footer>
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+let lastY = 0;
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('hidden', y > lastY && y > 80);
+  lastY = y;
+}, { passive: true });
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => navObs.observe(s));
+
+// Theme toggle with localStorage + system-preference default
+const root = document.documentElement;
+const tt = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('theme');
+const sys = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+const applyTheme = (t) => { root.setAttribute('data-theme', t); tt.textContent = t === 'light' ? '◐' : '◑'; };
+applyTheme(saved || sys);
+tt.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  localStorage.setItem('theme', next);
+});
+</script>
+</body>
+</html>
