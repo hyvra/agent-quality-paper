@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anna Hervey · Research Papers</title>
+<meta name="description" content="Research papers on production AI agent evaluation and research-grounded development workflow. By Anna Hervey, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0e12;
+  --bg-elevated:#12151b;
+  --bg-card:#181c24;
+  --border:#1e2330;
+  --border-accent:#2a3040;
+  --text:#d4d8e0;
+  --text-dim:#7a8194;
+  --text-bright:#eef0f4;
+  --accent:#c4956a;
+  --accent-dim:#8a6a4a;
+  --accent-bright:#e4b88a;
+  --nav-bg:rgba(12,14,18,.88);
+  --hero-glow:rgba(196,149,106,.06);
+  --row-hover:rgba(196,149,106,.03);
+  --serif:'Crimson Pro',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#faf7f0;
+  --bg-elevated:#f2ecdf;
+  --bg-card:#ebe3d2;
+  --border:#ddd3bf;
+  --border-accent:#c4b69a;
+  --text:#2d2721;
+  --text-dim:#6e6555;
+  --text-bright:#14100b;
+  --accent:#8a5a2a;
+  --accent-dim:#b08052;
+  --accent-bright:#6b4218;
+  --nav-bg:rgba(250,247,240,.88);
+  --hero-glow:rgba(138,90,42,.08);
+  --row-hover:rgba(138,90,42,.04);
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+body{font-family:var(--serif);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+::selection{background:var(--accent-dim);color:var(--text-bright)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:transform .3s,background .3s}
+.nav-inner{max-width:1100px;margin:0 auto;padding:.6rem 2rem;display:flex;align-items:center;gap:1.5rem}
+.nav-mark{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.nav-home{font-family:var(--sans);font-size:.65rem;color:var(--text-bright);text-decoration:none;padding:.35rem .65rem;border-radius:4px;letter-spacing:.02em;background:var(--bg-card)}
+.theme-toggle{background:transparent;border:1px solid var(--border-accent);color:var(--text-dim);font-family:var(--mono);font-size:.75rem;width:28px;height:26px;padding:0;border-radius:4px;cursor:pointer;margin-left:auto;transition:color .2s,border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;line-height:1}
+.theme-toggle:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--bg-card)}
+
+/* HERO */
+.page{flex:1;display:flex;flex-direction:column;justify-content:center;padding:7rem 2rem 4rem;position:relative;overflow:hidden}
+.page::before{content:'';position:absolute;top:-30%;right:-15%;width:60vw;height:60vw;background:radial-gradient(circle,var(--hero-glow) 0%,transparent 70%);pointer-events:none}
+.page-inner{max-width:1100px;margin:0 auto;width:100%;position:relative}
+.brand-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:.8rem}
+.brand-label::before{content:'';width:2rem;height:1px;background:var(--accent)}
+h1{font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,3.6rem);font-weight:300;line-height:1.12;color:var(--text-bright);margin-bottom:1.2rem;letter-spacing:-.02em;max-width:820px}
+.lede{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--text-dim);font-style:italic;margin-bottom:4rem;max-width:680px;line-height:1.55}
+
+/* PAPER CARDS */
+.papers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-bottom:4rem}
+.paper-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:2rem 2rem 1.8rem;display:flex;flex-direction:column;text-decoration:none;transition:transform .25s,border-color .25s,background .25s;position:relative;overflow:hidden}
+.paper-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--accent-dim),var(--accent-bright));opacity:.6;transition:opacity .25s}
+.paper-card:hover{transform:translateY(-4px);border-color:var(--accent-dim)}
+.paper-card:hover::before{opacity:1}
+.paper-num{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.paper-title{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:var(--text-bright);line-height:1.25;margin-bottom:.8rem;letter-spacing:-.01em}
+.paper-sub{font-family:var(--serif);font-size:.9rem;font-weight:300;color:var(--text-dim);font-style:italic;line-height:1.5;margin-bottom:1.5rem}
+.paper-meta{display:flex;flex-wrap:wrap;gap:1.2rem;margin-bottom:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.paper-meta-item{font-family:var(--sans);font-size:.6rem}
+.paper-meta-item dt{color:var(--accent-dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:.15rem}
+.paper-meta-item dd{color:var(--text);font-family:var(--mono);font-size:.72rem}
+.paper-cta{font-family:var(--sans);font-size:.72rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-top:auto;padding-top:1rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.5rem;transition:color .2s,gap .2s}
+.paper-card:hover .paper-cta{color:var(--accent-bright);gap:.8rem}
+
+/* AUTHOR */
+.author{font-family:var(--sans);font-size:.7rem;color:var(--text-dim);padding-top:2.5rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:2rem;align-items:baseline}
+.author strong{color:var(--text-bright);font-weight:600;font-family:var(--serif);font-size:.95rem;font-style:normal}
+.author-bio{max-width:680px;font-family:var(--serif);font-size:.92rem;color:var(--text);line-height:1.6;font-weight:300;font-style:italic}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--sans);font-size:.62rem;color:var(--text-dim)}
+
+/* ANIMATIONS */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.paper-card.fade-in:nth-child(2){transition-delay:.1s}
+
+/* RESPONSIVE */
+@media(max-width:820px){
+  html{font-size:16px}
+  .page{padding:6rem 1.2rem 3rem}
+  .papers-grid{grid-template-columns:1fr;gap:1rem}
+  .paper-card{padding:1.5rem}
+  .nav-inner{padding:.5rem 1rem}
+  .author{flex-direction:column;gap:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+<div class="nav-inner">
+  <span class="nav-mark">AH · 2026</span>
+  <a href="home.html" class="nav-home">Home</a>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">◑</button>
+</div>
+</nav>
+
+<main class="page">
+<div class="page-inner">
+  <div class="brand-label fade-in">Anna Hervey · Research · 2026</div>
+  <h1 class="fade-in">Production AI agent evaluation &amp; research-grounded development.</h1>
+  <p class="lede fade-in">Two companion white papers on how to measure AI agent quality with psychometric rigor, and how to build engineering decisions that survive expert scrutiny.</p>
+
+  <div class="papers-grid">
+    <a href="index.html" class="paper-card fade-in">
+      <div class="paper-num">Paper 01 · April 2026</div>
+      <div class="paper-title">A Practitioner's Framework for Evaluating Production AI&nbsp;Agents</div>
+      <div class="paper-sub">15 dimensions, 75+ criteria, grounded in 17 peer-reviewed sources from Anthropic, OpenAI, Google DeepMind, Microsoft Research, and Princeton.</div>
+      <dl class="paper-meta">
+        <div class="paper-meta-item"><dt>Dimensions</dt><dd>15</dd></div>
+        <div class="paper-meta-item"><dt>Criteria</dt><dd>75+</dd></div>
+        <div class="paper-meta-item"><dt>Scale</dt><dd>270 pts</dd></div>
+        <div class="paper-meta-item"><dt>Tier 1 Sources</dt><dd>17</dd></div>
+      </dl>
+      <div class="paper-cta">Read paper →</div>
+    </a>
+    <a href="rgdw.html" class="paper-card fade-in">
+      <div class="paper-num">Paper 02 · April 2026</div>
+      <div class="paper-title">Research-Grounded Development — An Automated Evidence Pipeline</div>
+      <div class="paper-sub">How structural enforcement, adversarial proofing, and auto-revision loops produce defensible technical decisions without human research effort.</div>
+      <dl class="paper-meta">
+        <div class="paper-meta-item"><dt>Decision Tiers</dt><dd>3</dd></div>
+        <div class="paper-meta-item"><dt>Quality Gates</dt><dd>3</dd></div>
+        <div class="paper-meta-item"><dt>Pipeline Stages</dt><dd>8</dd></div>
+        <div class="paper-meta-item"><dt>Version</dt><dd>v2.1</dd></div>
+      </dl>
+      <div class="paper-cta">Read paper →</div>
+    </a>
+  </div>
+
+  <div class="author fade-in">
+    <div>
+      <strong>Anna Hervey</strong>
+    </div>
+    <div class="author-bio">Independent researcher building production AI agent systems. Published methodology for evaluating agent quality with psychometric rigor, and a structural workflow that grounds every non-trivial engineering decision in evidence before it reaches the operator.</div>
+  </div>
+</div>
+</main>
+
+<footer>Anna Hervey · April 2026</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+const root = document.documentElement;
+const tt = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('theme');
+const sys = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+const applyTheme = (t) => { root.setAttribute('data-theme', t); tt.textContent = t === 'light' ? '◐' : '◑'; };
+applyTheme(saved || sys);
+tt.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  localStorage.setItem('theme', next);
+});
+</script>
+</body>
+</html>
