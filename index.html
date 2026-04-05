@@ -8,58 +8,59 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0c0e12;
-  --bg-elevated:#12151b;
-  --bg-card:#181c24;
-  --border:#1e2330;
-  --border-accent:#2a3040;
-  --text:#d4d8e0;
-  --text-dim:#7a8194;
-  --text-bright:#eef0f4;
-  --accent:#c4956a;
-  --accent-dim:#8a6a4a;
-  --accent-bright:#e4b88a;
-  --green:#6abf8a;
-  --green-dim:#2a4a3a;
-  --yellow:#d4b86a;
-  --yellow-dim:#4a3f2a;
-  --red:#bf6a6a;
-  --red-dim:#4a2a2a;
-  --blue:#6a9abf;
-  --nav-bg:rgba(12,14,18,.88);
-  --hero-glow:rgba(196,149,106,.06);
-  --row-hover:rgba(196,149,106,.03);
+  --bg:#0a0a0b;
+  --bg-elevated:#141416;
+  --bg-card:#1c1c20;
+  --border:#2a2a30;
+  --border-accent:#3a3a42;
+  --text:#d1d1d6;
+  --text-dim:#7c7c85;
+  --text-bright:#f0f0f2;
+  --accent:#6b8aff;
+  --accent-dim:#4a6ad4;
+  --accent-bright:#8aa4ff;
+  --green:#34c759;
+  --green-dim:#1a3a24;
+  --yellow:#ffd60a;
+  --yellow-dim:#3a3510;
+  --red:#ff453a;
+  --red-dim:#3a1a1a;
+  --blue:#64d2ff;
+  --nav-bg:rgba(10,10,11,.88);
+  --hero-glow:rgba(107,138,255,.06);
+  --row-hover:rgba(107,138,255,.03);
   --serif:'Crimson Pro',Georgia,serif;
   --sans:'DM Sans',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
   --max-w:820px;
 }
 [data-theme="light"]{
-  --bg:#faf7f0;
-  --bg-elevated:#f2ecdf;
-  --bg-card:#ebe3d2;
-  --border:#ddd3bf;
-  --border-accent:#c4b69a;
-  --text:#2d2721;
-  --text-dim:#6e6555;
-  --text-bright:#14100b;
-  --accent:#8a5a2a;
-  --accent-dim:#b08052;
-  --accent-bright:#6b4218;
-  --green:#3f6e52;
-  --green-dim:#c5ddcd;
-  --yellow:#8a6f28;
-  --yellow-dim:#e8dcb3;
-  --red:#8a3f3f;
-  --red-dim:#e8cdcd;
-  --blue:#2f5c78;
-  --nav-bg:rgba(250,247,240,.88);
-  --hero-glow:rgba(138,90,42,.08);
-  --row-hover:rgba(138,90,42,.04);
+  --bg:#ffffff;
+  --bg-elevated:#f5f5f7;
+  --bg-card:#ececf0;
+  --border:#d8d8dc;
+  --border-accent:#c0c0c8;
+  --text:#1d1d1f;
+  --text-dim:#6e6e73;
+  --text-bright:#000000;
+  --accent:#2d5cf6;
+  --accent-dim:#5a7ef8;
+  --accent-bright:#1a45d4;
+  --green:#248a3d;
+  --green-dim:#d0ecd8;
+  --yellow:#9a7b00;
+  --yellow-dim:#f0e6b8;
+  --red:#d63030;
+  --red-dim:#f0d0d0;
+  --blue:#0071e3;
+  --nav-bg:rgba(255,255,255,.88);
+  --hero-glow:rgba(45,92,246,.06);
+  --row-hover:rgba(45,92,246,.03);
 }
 html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased}
 body{font-family:var(--serif);overflow-x:hidden}
@@ -226,6 +227,10 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
   .toc{padding:1.5rem}
   th,td{padding:.5rem .6rem}
 }
+
+/* D3 CHARTS */
+.d3-chart{width:100%}
+.d3-chart svg{display:block;width:100%;height:auto}
 </style>
 </head>
 <body>
@@ -395,6 +400,8 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
 <h2>The framework: 15 dimensions, 75+ criteria</h2>
 
 <h3>Five-tier structure and weights</h3>
+<div class="figure fade-in" id="chart-tier-weights"><div class="d3-chart"></div></div>
+
 <div class="table-wrap">
 <table>
 <thead><tr><th>Tier</th><th>Dimensions</th><th style="text-align:right">Weight</th><th>Evidence basis</th></tr></thead>
@@ -486,6 +493,8 @@ D6 originally contained 9 criteria spanning two distinct constructs: whether you
 </tbody>
 </table>
 </div>
+
+<div class="figure fade-in" id="chart-grade-bands"><div class="d3-chart"></div></div>
 </section>
 
 <!-- MULTI-AGENT -->
@@ -495,12 +504,7 @@ D6 originally contained 9 criteria spanning two distinct constructs: whether you
 <h3>Architecture selection is the single highest-leverage decision</h3>
 <p>Multi-agent performance is dominated by architecture-task interaction, not agent count (Kim et al., 180 configurations, range −70% to +81%, σ=45.2%). The decision that dominates all others is architecture selection before a line of code is written. Three questions determine whether multi-agent is appropriate and which topology to use.</p>
 
-<div class="figure fade-in">
-<div class="priority-chart">
-  <div style="font-family:var(--sans);font-size:.68rem;color:var(--text-dim);margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.06em;">Error amplification by architecture</div>
-  <div class="pcr"><span class="pcr-rank" style="width:auto;padding-right:.5rem">Independent parallel</span><div class="pcr-track"><div class="pcr-fill" style="width:100%;background:linear-gradient(to right,var(--red),#bf4a4a)"></div></div><span class="pcr-val" style="color:var(--red)">17.2×</span></div>
-  <div class="pcr"><span class="pcr-rank" style="width:auto;padding-right:.5rem">Centralized (hub-spoke)</span><div class="pcr-track"><div class="pcr-fill" style="width:25.6%;background:linear-gradient(to right,var(--green-dim),var(--green))"></div></div><span class="pcr-val" style="color:var(--green)">4.4×</span></div>
-</div>
+<div class="figure fade-in" id="chart-error-amplification"><div class="d3-chart"></div>
 <p class="fig-caption"><strong>Figure 1.</strong> Error amplification by coordination architecture (Google Scaling Science, 180 configurations). Centralized (hierarchical orchestrator) contains error amplification to 4.4×. Independent parallel agents amplify errors 17.2×. This is a 4× safety difference that no execution quality can compensate for.</p>
 </div>
 
@@ -514,12 +518,7 @@ D6 originally contained 9 criteria spanning two distinct constructs: whether you
 <h3>Multi-agent failure distribution</h3>
 <p>MAST (Cemri et al., NeurIPS 2025 D&amp;B Spotlight, 1,642 traces, κ=0.88) found that failure modes in multi-agent systems are predominantly coordination problems, not capability problems:</p>
 
-<div class="figure fade-in">
-<div class="priority-chart">
-  <div class="pcr"><span class="pcr-rank">1</span><span class="pcr-label">Specification failures <span style="color:var(--text-dim);font-size:.62rem">(task/role disobedience, step repetition, context loss)</span></span><div class="pcr-track"><div class="pcr-fill" style="width:100%"></div></div><span class="pcr-val">41.8%</span></div>
-  <div class="pcr"><span class="pcr-rank">2</span><span class="pcr-label">Inter-agent misalignment <span style="color:var(--text-dim);font-size:.62rem">(information withholding, ignored input, reasoning mismatch)</span></span><div class="pcr-track"><div class="pcr-fill" style="width:88.3%"></div></div><span class="pcr-val">36.9%</span></div>
-  <div class="pcr"><span class="pcr-rank">3</span><span class="pcr-label">Verification failures <span style="color:var(--text-dim);font-size:.62rem">(premature termination, incomplete or incorrect verification)</span></span><div class="pcr-track"><div class="pcr-fill" style="width:51%"></div></div><span class="pcr-val">21.3%</span></div>
-</div>
+<div class="figure fade-in" id="chart-failure-distribution"><div class="d3-chart"></div>
 <p class="fig-caption"><strong>Figure 2.</strong> Failure distribution across 1,642 annotated multi-agent execution traces, 7 production frameworks (MAST, NeurIPS 2025 D&amp;B Spotlight). Failure rates ranged 41–86.7% across frameworks. Improving the base model does not fix coordination design failures.</p>
 </div>
 
@@ -591,13 +590,7 @@ D6 originally contained 9 criteria spanning two distinct constructs: whether you
 <h3>Track A — Continuous drift monitoring (metric-triggered)</h3>
 <p>One simulation study (Rath et al., "Agent Drift," arXiv:2601.04170, 2026) reports drift onset at median 73 interactions; by 500 interactions, 50% of agents were affected with a 42% task success reduction. These thresholds are from a single study and should be treated as starting points pending production replication. The directional finding holds: a 6-month review cycle cannot catch drift that begins in week one. Establish a baseline at deployment (first 50 interactions): pass^k, human intervention rate, tool selection distribution, response length distribution. Investigate immediately if any threshold is crossed:</p>
 
-<div class="priority-chart">
-  <div class="pcr"><span class="pcr-rank">↑</span><span class="pcr-label">Human intervention rate</span><div class="pcr-track"><div class="pcr-fill" style="width:80%"></div></div><span class="pcr-val">+20%</span></div>
-  <div class="pcr"><span class="pcr-rank">↓</span><span class="pcr-label">Pass^k (k=3)</span><div class="pcr-track"><div class="pcr-fill" style="width:60%"></div></div><span class="pcr-val">−10 pts</span></div>
-  <div class="pcr"><span class="pcr-rank">↕</span><span class="pcr-label">Tool selection distribution</span><div class="pcr-track"><div class="pcr-fill" style="width:70%"></div></div><span class="pcr-val">χ² p&lt;.05</span></div>
-  <div class="pcr"><span class="pcr-rank">↕</span><span class="pcr-label">Response length distribution</span><div class="pcr-track"><div class="pcr-fill" style="width:55%"></div></div><span class="pcr-val">&gt;2σ</span></div>
-  <div class="pcr"><span class="pcr-rank">↓</span><span class="pcr-label">Policy compliance rate</span><div class="pcr-track"><div class="pcr-fill" style="width:45%"></div></div><span class="pcr-val">−5 pts</span></div>
-</div>
+<div class="figure" id="chart-drift-thresholds"><div class="d3-chart"></div></div>
 
 <p><strong>EU AI Act Article 72 (high-risk AI, effective August 2, 2026):</strong> Providers must "actively and systematically collect, document and analyse relevant data" throughout the system's lifetime, and must include "analysis of the interaction with other AI systems." For qualifying systems, this track is legally required with documented evidence of monitoring.</p>
 
@@ -797,6 +790,454 @@ tt.addEventListener('click', () => {
   applyTheme(next);
   localStorage.setItem('theme', next);
 });
+</script>
+
+<script>
+(function() {
+  // ── Helpers ──
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function fontSans() { return css('--sans') || 'system-ui, sans-serif'; }
+  function fontMono() { return css('--mono') || 'monospace'; }
+
+  // ── 1. Tier Weights Donut ──
+  function drawDonut() {
+    const container = d3.select('#chart-tier-weights .d3-chart');
+    container.selectAll('*').remove();
+
+    const data = [
+      { label: 'Eval & Quality\nInfrastructure', value: 29 },
+      { label: 'Robustness', value: 21 },
+      { label: 'Core\nEngineering', value: 20 },
+      { label: 'Safety &\nTrust', value: 17 },
+      { label: 'Output\nQuality', value: 13 }
+    ];
+
+    const colors = [css('--accent'), css('--green'), css('--blue'), css('--yellow'), css('--red')];
+    const w = 520, h = 320, r = Math.min(w, h) / 2 - 40, inner = r * 0.55;
+
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const g = svg.append('g').attr('transform', `translate(${w/2},${h/2})`);
+
+    const pie = d3.pie().value(d => d.value).sort(null).padAngle(0.02);
+    const arc = d3.arc().innerRadius(inner).outerRadius(r);
+    const labelArc = d3.arc().innerRadius(r + 16).outerRadius(r + 16);
+
+    const arcs = g.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
+
+    arcs.append('path')
+      .attr('d', arc)
+      .attr('fill', (d, i) => colors[i])
+      .attr('opacity', 0.9)
+      .attr('stroke', css('--bg'))
+      .attr('stroke-width', 2)
+      .each(function(d) { this._current = { startAngle: d.startAngle, endAngle: d.startAngle }; })
+      .transition().duration(800).delay((d, i) => i * 100)
+      .attrTween('d', function(d) {
+        const interp = d3.interpolate(this._current, d);
+        this._current = interp(1);
+        return t => arc(interp(t));
+      });
+
+    // Labels
+    arcs.append('text')
+      .attr('transform', d => `translate(${labelArc.centroid(d)})`)
+      .attr('text-anchor', 'middle')
+      .attr('fill', css('--text'))
+      .attr('font-family', fontSans())
+      .attr('font-size', '10px')
+      .attr('font-weight', 500)
+      .attr('opacity', 0)
+      .each(function(d) {
+        const lines = d.data.label.split('\n');
+        const el = d3.select(this);
+        lines.forEach((line, i) => {
+          el.append('tspan')
+            .attr('x', 0)
+            .attr('dy', i === 0 ? 0 : '1.15em')
+            .text(line);
+        });
+      })
+      .transition().delay(900).duration(400).attr('opacity', 1);
+
+    // Percentage inside
+    arcs.append('text')
+      .attr('transform', d => `translate(${d3.arc().innerRadius(inner + (r - inner) * 0.45).outerRadius(inner + (r - inner) * 0.45).centroid(d)})`)
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', '#fff')
+      .attr('font-family', fontMono())
+      .attr('font-size', '11px')
+      .attr('font-weight', 500)
+      .text(d => d.data.value + '%')
+      .attr('opacity', 0)
+      .transition().delay(900).duration(400).attr('opacity', 1);
+
+    // Center label
+    g.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--text-dim'))
+      .attr('font-family', fontMono())
+      .attr('font-size', '11px')
+      .text('270 pts');
+  }
+
+  // ── 2. Error Amplification Bar Chart (Figure 1) ──
+  function drawErrorAmplification() {
+    const container = d3.select('#chart-error-amplification .d3-chart');
+    container.selectAll('*').remove();
+
+    const data = [
+      { label: 'Independent parallel', value: 17.2, color: css('--red') },
+      { label: 'Centralized (hub-spoke)', value: 4.4, color: css('--green') }
+    ];
+
+    const margin = { top: 24, right: 60, bottom: 20, left: 180 };
+    const w = 600, h = 110;
+    const iw = w - margin.left - margin.right;
+    const ih = h - margin.top - margin.bottom;
+
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // Title
+    svg.append('text')
+      .attr('x', margin.left)
+      .attr('y', 14)
+      .attr('fill', css('--text-dim'))
+      .attr('font-family', fontSans())
+      .attr('font-size', '10px')
+      .attr('text-transform', 'uppercase')
+      .attr('letter-spacing', '0.06em')
+      .text('ERROR AMPLIFICATION BY ARCHITECTURE');
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, 20]).range([0, iw]);
+    const y = d3.scaleBand().domain(data.map(d => d.label)).range([0, ih]).padding(0.35);
+
+    // Axis line
+    g.append('line')
+      .attr('x1', 0).attr('y1', ih)
+      .attr('x2', iw).attr('y2', ih)
+      .attr('stroke', css('--border')).attr('stroke-width', 1);
+
+    // Tick marks
+    [0, 5, 10, 15, 20].forEach(v => {
+      g.append('text')
+        .attr('x', x(v)).attr('y', ih + 14)
+        .attr('text-anchor', 'middle')
+        .attr('fill', css('--text-dim'))
+        .attr('font-family', fontMono())
+        .attr('font-size', '9px')
+        .text(v + '\u00d7');
+    });
+
+    // Labels
+    g.selectAll('.bar-label').data(data).enter()
+      .append('text')
+      .attr('x', -8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('text-anchor', 'end')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--text'))
+      .attr('font-family', fontSans())
+      .attr('font-size', '11px')
+      .text(d => d.label);
+
+    // Bars
+    g.selectAll('.bar').data(data).enter()
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', d => y(d.label))
+      .attr('height', y.bandwidth())
+      .attr('rx', 3)
+      .attr('fill', d => d.color)
+      .attr('opacity', 0.85)
+      .attr('width', 0)
+      .transition().duration(700).delay((d, i) => i * 150)
+      .attr('width', d => x(d.value));
+
+    // Value labels
+    g.selectAll('.bar-val').data(data).enter()
+      .append('text')
+      .attr('x', d => x(d.value) + 8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('dominant-baseline', 'central')
+      .attr('fill', d => d.color)
+      .attr('font-family', fontMono())
+      .attr('font-size', '12px')
+      .attr('font-weight', 600)
+      .text(d => d.value + '\u00d7')
+      .attr('opacity', 0)
+      .transition().delay(800).duration(300).attr('opacity', 1);
+  }
+
+  // ── 3. Multi-Agent Failure Distribution (Figure 2) ──
+  function drawFailureDistribution() {
+    const container = d3.select('#chart-failure-distribution .d3-chart');
+    container.selectAll('*').remove();
+
+    const data = [
+      { label: 'Specification failures', value: 41.8 },
+      { label: 'Inter-agent misalignment', value: 36.9 },
+      { label: 'Verification failures', value: 21.3 }
+    ];
+
+    const margin = { top: 8, right: 60, bottom: 20, left: 180 };
+    const w = 600, h = 110;
+    const iw = w - margin.left - margin.right;
+    const ih = h - margin.top - margin.bottom;
+
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, 50]).range([0, iw]);
+    const y = d3.scaleBand().domain(data.map(d => d.label)).range([0, ih]).padding(0.3);
+
+    // Create gradient
+    const defs = svg.append('defs');
+    const grad = defs.append('linearGradient').attr('id', 'failure-grad');
+    grad.append('stop').attr('offset', '0%').attr('stop-color', css('--accent-dim'));
+    grad.append('stop').attr('offset', '100%').attr('stop-color', css('--accent-bright'));
+
+    // Axis
+    g.append('line')
+      .attr('x1', 0).attr('y1', ih)
+      .attr('x2', iw).attr('y2', ih)
+      .attr('stroke', css('--border')).attr('stroke-width', 1);
+
+    [0, 10, 20, 30, 40, 50].forEach(v => {
+      g.append('text')
+        .attr('x', x(v)).attr('y', ih + 14)
+        .attr('text-anchor', 'middle')
+        .attr('fill', css('--text-dim'))
+        .attr('font-family', fontMono())
+        .attr('font-size', '9px')
+        .text(v + '%');
+    });
+
+    // Labels
+    g.selectAll('.bar-label').data(data).enter()
+      .append('text')
+      .attr('x', -8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('text-anchor', 'end')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--text'))
+      .attr('font-family', fontSans())
+      .attr('font-size', '11px')
+      .text(d => d.label);
+
+    // Bars
+    g.selectAll('.bar').data(data).enter()
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', d => y(d.label))
+      .attr('height', y.bandwidth())
+      .attr('rx', 3)
+      .attr('fill', 'url(#failure-grad)')
+      .attr('opacity', 0.85)
+      .attr('width', 0)
+      .transition().duration(700).delay((d, i) => i * 150)
+      .attr('width', d => x(d.value));
+
+    // Value labels
+    g.selectAll('.bar-val').data(data).enter()
+      .append('text')
+      .attr('x', d => x(d.value) + 8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--accent'))
+      .attr('font-family', fontMono())
+      .attr('font-size', '12px')
+      .attr('font-weight', 600)
+      .text(d => d.value + '%')
+      .attr('opacity', 0)
+      .transition().delay(800).duration(300).attr('opacity', 1);
+  }
+
+  // ── 4. Grade Bands Scale ──
+  function drawGradeBands() {
+    const container = d3.select('#chart-grade-bands .d3-chart');
+    container.selectAll('*').remove();
+
+    const bands = [
+      { grade: 'F', min: 0, max: 149, color: css('--red') },
+      { grade: 'D', min: 149, max: 176, color: '#bf8a6a' },
+      { grade: 'C', min: 176, max: 203, color: css('--yellow') },
+      { grade: 'B', min: 203, max: 230, color: css('--blue') },
+      { grade: 'A', min: 230, max: 270, color: css('--green') }
+    ];
+
+    const margin = { top: 12, right: 20, bottom: 28, left: 20 };
+    const w = 600, h = 70;
+    const iw = w - margin.left - margin.right;
+    const ih = h - margin.top - margin.bottom;
+
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const x = d3.scaleLinear().domain([0, 270]).range([0, iw]);
+
+    // Segments
+    g.selectAll('.band').data(bands).enter()
+      .append('rect')
+      .attr('x', d => x(d.min))
+      .attr('y', 0)
+      .attr('height', ih)
+      .attr('rx', 3)
+      .attr('fill', d => d.color)
+      .attr('opacity', 0.8)
+      .attr('width', 0)
+      .transition().duration(600).delay((d, i) => i * 100)
+      .attr('width', d => x(d.max) - x(d.min) - 1);
+
+    // Grade labels
+    g.selectAll('.grade-label').data(bands).enter()
+      .append('text')
+      .attr('x', d => x(d.min) + (x(d.max) - x(d.min)) / 2)
+      .attr('y', ih / 2)
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', '#fff')
+      .attr('font-family', fontMono())
+      .attr('font-size', '12px')
+      .attr('font-weight', 700)
+      .text(d => d.grade)
+      .attr('opacity', 0)
+      .transition().delay(700).duration(300).attr('opacity', 1);
+
+    // Tick values
+    [0, 149, 176, 203, 230, 270].forEach(v => {
+      g.append('text')
+        .attr('x', x(v))
+        .attr('y', ih + 16)
+        .attr('text-anchor', 'middle')
+        .attr('fill', css('--text-dim'))
+        .attr('font-family', fontMono())
+        .attr('font-size', '9px')
+        .text(v);
+    });
+  }
+
+  // ── 5. Drift Monitoring Thresholds ──
+  function drawDriftThresholds() {
+    const container = d3.select('#chart-drift-thresholds .d3-chart');
+    container.selectAll('*').remove();
+
+    const data = [
+      { label: 'Human intervention rate', value: '+20%', num: 80, dir: '\u2191' },
+      { label: 'Tool selection distribution', value: '\u03c7\u00b2 p<.05', num: 70, dir: '\u2195' },
+      { label: 'Pass^k (k=3)', value: '\u221210 pts', num: 60, dir: '\u2193' },
+      { label: 'Response length distribution', value: '>2\u03c3', num: 55, dir: '\u2195' },
+      { label: 'Policy compliance rate', value: '\u22125 pts', num: 45, dir: '\u2193' }
+    ];
+
+    const margin = { top: 8, right: 70, bottom: 20, left: 195 };
+    const w = 620, h = 170;
+    const iw = w - margin.left - margin.right;
+    const ih = h - margin.top - margin.bottom;
+
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, 100]).range([0, iw]);
+    const y = d3.scaleBand().domain(data.map(d => d.label)).range([0, ih]).padding(0.28);
+
+    // Create gradient
+    const defs = svg.append('defs');
+    const grad = defs.append('linearGradient').attr('id', 'drift-grad');
+    grad.append('stop').attr('offset', '0%').attr('stop-color', css('--accent-dim'));
+    grad.append('stop').attr('offset', '100%').attr('stop-color', css('--accent'));
+
+    // Axis
+    g.append('line')
+      .attr('x1', 0).attr('y1', ih)
+      .attr('x2', iw).attr('y2', ih)
+      .attr('stroke', css('--border')).attr('stroke-width', 1);
+
+    // Direction + Labels
+    g.selectAll('.bar-label').data(data).enter()
+      .append('text')
+      .attr('x', -8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('text-anchor', 'end')
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--text'))
+      .attr('font-family', fontSans())
+      .attr('font-size', '10.5px')
+      .text(d => d.dir + ' ' + d.label);
+
+    // Bars
+    g.selectAll('.bar').data(data).enter()
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', d => y(d.label))
+      .attr('height', y.bandwidth())
+      .attr('rx', 3)
+      .attr('fill', 'url(#drift-grad)')
+      .attr('opacity', 0.8)
+      .attr('width', 0)
+      .transition().duration(600).delay((d, i) => i * 100)
+      .attr('width', d => x(d.num));
+
+    // Threshold labels
+    g.selectAll('.bar-val').data(data).enter()
+      .append('text')
+      .attr('x', d => x(d.num) + 8)
+      .attr('y', d => y(d.label) + y.bandwidth() / 2)
+      .attr('dominant-baseline', 'central')
+      .attr('fill', css('--accent'))
+      .attr('font-family', fontMono())
+      .attr('font-size', '11px')
+      .attr('font-weight', 500)
+      .text(d => d.value)
+      .attr('opacity', 0)
+      .transition().delay(700).duration(300).attr('opacity', 1);
+  }
+
+  // ── Draw all ──
+  function drawAll() {
+    drawDonut();
+    drawErrorAmplification();
+    drawFailureDistribution();
+    drawGradeBands();
+    drawDriftThresholds();
+  }
+
+  drawAll();
+
+  // ── Theme change observer ──
+  const mo = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === 'data-theme') {
+        drawAll();
+        return;
+      }
+    }
+  });
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // ── Resize handler ──
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawAll, 250);
+  });
+})();
 </script>
 </body>
 </html>
