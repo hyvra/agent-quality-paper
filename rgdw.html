@@ -12,54 +12,54 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0c0e12;
-  --bg-elevated:#12151b;
-  --bg-card:#181c24;
-  --border:#1e2330;
-  --border-accent:#2a3040;
-  --text:#d4d8e0;
-  --text-dim:#7a8194;
-  --text-bright:#eef0f4;
-  --accent:#c4956a;
-  --accent-dim:#8a6a4a;
-  --accent-bright:#e4b88a;
-  --green:#6abf8a;
-  --green-dim:#2a4a3a;
-  --yellow:#d4b86a;
-  --yellow-dim:#4a3f2a;
-  --red:#bf6a6a;
-  --red-dim:#4a2a2a;
-  --blue:#6a9abf;
-  --nav-bg:rgba(12,14,18,.88);
-  --hero-glow:rgba(196,149,106,.06);
-  --row-hover:rgba(196,149,106,.03);
+  --bg:#0a0a0b;
+  --bg-elevated:#141416;
+  --bg-card:#1c1c20;
+  --border:#2a2a30;
+  --border-accent:#3a3a42;
+  --text:#d1d1d6;
+  --text-dim:#7c7c85;
+  --text-bright:#f0f0f2;
+  --accent:#6b8aff;
+  --accent-dim:#4a6ad4;
+  --accent-bright:#8aa4ff;
+  --green:#34c759;
+  --green-dim:#1a3a24;
+  --yellow:#ffd60a;
+  --yellow-dim:#3a3510;
+  --red:#ff453a;
+  --red-dim:#3a1a1a;
+  --blue:#64d2ff;
+  --nav-bg:rgba(10,10,11,.88);
+  --hero-glow:rgba(107,138,255,.06);
+  --row-hover:rgba(107,138,255,.03);
   --serif:'Crimson Pro',Georgia,serif;
   --sans:'DM Sans',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
   --max-w:820px;
 }
 [data-theme="light"]{
-  --bg:#faf7f0;
-  --bg-elevated:#f2ecdf;
-  --bg-card:#ebe3d2;
-  --border:#ddd3bf;
-  --border-accent:#c4b69a;
-  --text:#2d2721;
-  --text-dim:#6e6555;
-  --text-bright:#14100b;
-  --accent:#8a5a2a;
-  --accent-dim:#b08052;
-  --accent-bright:#6b4218;
-  --green:#3f6e52;
-  --green-dim:#c5ddcd;
-  --yellow:#8a6f28;
-  --yellow-dim:#e8dcb3;
-  --red:#8a3f3f;
-  --red-dim:#e8cdcd;
-  --blue:#2f5c78;
-  --nav-bg:rgba(250,247,240,.88);
-  --hero-glow:rgba(138,90,42,.08);
-  --row-hover:rgba(138,90,42,.04);
+  --bg:#ffffff;
+  --bg-elevated:#f5f5f7;
+  --bg-card:#ececf0;
+  --border:#d8d8dc;
+  --border-accent:#c0c0c8;
+  --text:#1d1d1f;
+  --text-dim:#6e6e73;
+  --text-bright:#000000;
+  --accent:#2d5cf6;
+  --accent-dim:#5a7ef8;
+  --accent-bright:#1a45d4;
+  --green:#248a3d;
+  --green-dim:#d0ecd8;
+  --yellow:#9a7b00;
+  --yellow-dim:#f0e6b8;
+  --red:#d63030;
+  --red-dim:#f0d0d0;
+  --blue:#0071e3;
+  --nav-bg:rgba(255,255,255,.88);
+  --hero-glow:rgba(45,92,246,.06);
+  --row-hover:rgba(45,92,246,.03);
 }
 html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased}
 body{font-family:var(--serif);overflow-x:hidden}
@@ -295,7 +295,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
 <h2>Abstract</h2>
 <p>Self-taught engineers building production AI systems face a structural asymmetry: their engineering skill outpaces their academic grounding. When a PhD reviewer asks <em>"why this approach?"</em>, a blog post and a weekend of intuition do not survive scrutiny. The standard response — promise to do more research next time — fails because discipline does not scale and because the engineer remains the bottleneck in their own quality loop.</p>
 <p>This paper presents the Research-Grounded Development Workflow (RGDW): a structural system in which a fleet of specialized agents classifies every non-trivial engineering decision, dispatches parallel research sprints, adversarially attacks its own recommendations, fact-checks load-bearing claims, and enforces quality gates before any output reaches the human operator. Evidence quality comes from architecture, not from willpower. The operator reviews conclusions, never the process.</p>
-<p>The system is grounded in a 93-job-description corpus showing research capability is table-stakes for AI agent engineering roles, a published methodology for evaluating production agents (companion paper), and empirical findings from multi-agent research pipelines at industry labs. Its core contribution is not any single technique but the combination of <strong>classifier–enforcer separation</strong>, <strong>pre-registered disconfirmation</strong>, <strong>red-team agents instantiated separately from the validators they attack</strong>, and <strong>auto-revision loops that resolve high-confidence attacks without human intervention</strong>. The result is an evidence trail that withstands expert scrutiny, produced automatically, on every decision that matters.</p>
+<p>The system is grounded in a 93-job-description analysis suggesting research capability is commonly expected in AI agent engineering roles, a published methodology for evaluating production agents (companion paper), and empirical findings from multi-agent research pipelines at industry labs. Its core contribution is not any single technique but the combination of <strong>classifier–enforcer separation</strong>, <strong>pre-registered disconfirmation</strong>, <strong>red-team agents instantiated separately from the validators they attack</strong>, and <strong>auto-revision loops that resolve high-confidence attacks without human intervention</strong>. The result is an evidence trail that withstands expert scrutiny, produced automatically, on every decision that matters.</p>
 
 <div class="toc">
 <h3>Contents</h3>
@@ -318,13 +318,13 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
 <section id="problem" class="fade-in">
 <h2>The self-taught gap: why discipline is not enough</h2>
 <p>Engineering skill and academic grounding are separable. An engineer can ship a working system without ever reading the paper that explains why their approach works — or fails. This asymmetry is invisible until the moment someone qualified asks <em>why</em>. At that moment, an evidence trail that does not exist cannot be summoned.</p>
-<p>A grounded-theory analysis of 93 job descriptions across 12 AI engineering organizations — Anthropic, OpenAI, Google DeepMind, Meta, Microsoft, Scale, Sierra, Cognition, Cursor, Databricks, Perplexity, Hugging Face — shows research capability is not an optional senior-level differentiator. It is explicitly required in 18 of the top 20 roles under terms like <em>"stay current on AI/ML research and tools,"</em> <em>"research and implement state-of-the-art using foundation models,"</em> and <em>"research cutting-edge algorithms for integration into the training stack."</em> Cross-functional communication roles add the converse requirement: defending technical choices in design reviews, customer conversations, and field-feedback reports back to Research and Product.</p>
+<p>An analysis of 93 job descriptions across 12 AI engineering organizations — Anthropic, OpenAI, Google DeepMind, Meta, Microsoft, Scale, Sierra, Cognition, Cursor, Databricks, Perplexity, Hugging Face — shows research capability is not an optional senior-level differentiator. It is explicitly required in 18 of the top 20 roles under terms like <em>"stay current on AI/ML research and tools,"</em> <em>"research and implement state-of-the-art using foundation models,"</em> and <em>"research cutting-edge algorithms for integration into the training stack."</em> Cross-functional communication roles add the converse requirement: defending technical choices in design reviews, customer conversations, and field-feedback reports back to Research and Product.</p>
 
 <div class="pull-stat">
   <div class="pull-stat-num">18/20</div>
   <div>
     <div class="pull-stat-text">Of top-tier AI engineering roles explicitly require ongoing research capability — not as senior differentiation but as baseline responsibility. The gap is not the ability to build. It is the ability to defend why the build looks the way it does.</div>
-    <div class="pull-stat-source">93-JD corpus · 12 companies · grounded-theory coding · April 2026</div>
+    <div class="pull-stat-source">93-JD corpus · 12 companies · content analysis · April 2026</div>
   </div>
 </div>
 
@@ -350,7 +350,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;fo
 <p>PRISMA (Page et al., 2021), grounded theory (Strauss &amp; Corbin, 1998), and the broader systematic-review tradition in evidence-based medicine and social science prescribe rigorous research protocols: pre-registration of search strings, source classification, contradiction resolution, explicit exclusion criteria. These methods directly inspire RGDW's source-tier schema and pre-registered disconfirmation mechanics. Their limitation for engineering work is time-cost: a PRISMA-compliant systematic review takes weeks per question, which is incompatible with a shipping cadence measured in hours.</p>
 
 <h3>4 · Multi-agent research pipelines at industry labs</h3>
-<p>Published practitioner work on LLM-based research systems (Anthropic's multi-agent research architecture, 2025; published agent evaluation methodologies from industry labs) establishes that orchestrator-worker patterns with parallel subagent dispatch outperform single-agent research on complex queries, that <em>"detailed task descriptions prevent duplication"</em> across subagents, and that end-state evaluation is more tractable than per-step evaluation for stateful agents. Anthropic's reported finding — a multi-agent research system outperforming a single-agent baseline by 90.2% on internal evals, at 15× the token cost — is one of the more quantitatively clear signals that parallel decomposition matters for research quality.</p>
+<p>Anthropic's multi-agent research system ("How We Built Our Multi-Agent Research System," June 2025) establishes that orchestrator-worker patterns with parallel subagent dispatch outperform single-agent research on complex queries, that <em>"detailed task descriptions prevent duplication"</em> across subagents, and that end-state evaluation is more tractable than per-step evaluation for stateful agents. The system outperformed a single-agent baseline by 90.2% on internal research evals at approximately 15× the token cost — one of the more quantitatively clear signals that parallel decomposition matters for research quality.</p>
 <p>These works provide architecture patterns but not <em>engineering-decision</em> discipline: they describe research pipelines for answering user questions, not pipelines that gate-check their own outputs before an engineer commits code. The missing layer is adversarial proofing hooked directly into the development workflow.</p>
 
 <div class="callout">
@@ -404,7 +404,7 @@ No prior system combines: (1) automated research triggered by decision classific
     <div class="tier-foot">Time-box 4.5h · BLOCK Gates 2 + 3</div>
   </div>
 </div>
-<p class="fig-caption"><strong>Figure 1.</strong> Decision classification tiers. Any single criterion being true escalates the tier. The architect classifies, the conductor enforces, and downgrade requires documented rationale approved by the enforcer. When the operator enters a new domain, the first five decisions are automatically classified T3 regardless of other criteria — this forces the learning loop. After five completed T3 decisions in a domain, the tracker permits T2 classification for subsequent decisions that otherwise qualify.</p>
+<p class="fig-caption"><strong>Figure 1.</strong> Decision classification tiers. Any single criterion being true escalates the tier. The architect classifies, the conductor enforces, and downgrade requires documented rationale approved by the enforcer. When the operator enters a new domain, the first five decisions are automatically classified T3 regardless of other criteria — this forces the learning loop. After five completed T3 decisions in a domain (a configurable threshold; 5 is the default based on the author's judgment, not empirical calibration), the tracker permits T2 classification for subsequent decisions that otherwise qualify.</p>
 </div>
 
 <h3>3.2 · Evidence Record schema</h3>
@@ -456,7 +456,7 @@ No prior system combines: (1) automated research triggered by decision classific
   <div class="vpipe-row"><div class="vpipe-idx">08</div><div class="vpipe-agent">Fact-check</div><div class="vpipe-action">Verify URLs resolve · numbers match · tiers correctly classified</div><div class="vpipe-time">10–15m</div></div>
   <div class="vpipe-row"><div class="vpipe-idx">09</div><div class="vpipe-agent">Conductor</div><div class="vpipe-action">Run quality gates · BLOCK triggers auto-remediation · delivers to operator</div><div class="vpipe-time">5–10m</div></div>
 </div>
-<p class="fig-caption"><strong>Figure 3.</strong> Research sprint pipeline with T2/T3 time-boxes. Scouts execute in parallel (steps 01–03), as do late-stage scouts overlapping with early validation. Total automated pipeline time: ~2h for T2, ~4.5h for T3. The operator's involvement is bounded to the final review — all research, challenge, revision, and fact-checking happens upstream. Detailed task descriptions with explicit objectives, output formats, and source-category boundaries are assigned to each scout to prevent duplication — a failure mode documented in published multi-agent research pipelines where undifferentiated instructions led subagents to cover overlapping ground.</p>
+<p class="fig-caption"><strong>Figure 3.</strong> Research sprint pipeline with T2/T3 time-boxes. Scouts execute in parallel (steps 01–03), as do late-stage scouts overlapping with early validation. Total automated pipeline time: ~2h for T2, ~4.5h for T3. The operator's involvement is bounded to the final review — all research, challenge, revision, and fact-checking happens upstream. Detailed task descriptions with explicit objectives, output formats, and source-category boundaries are assigned to each scout to prevent duplication — a failure mode documented by Anthropic (June 2025) where undifferentiated instructions led subagents to cover overlapping ground.</p>
 </div>
 
 <h4>Minimum source requirements</h4>
@@ -569,8 +569,8 @@ No prior system combines: (1) automated research triggered by decision classific
 
 <!-- STRUCTURAL INTEGRITY -->
 <section id="integrity" class="fade-in">
-<h2>Structural integrity: why the system cannot be gamed</h2>
-<p>The RGDW's claim to produce defensible evidence rests on structural properties, not on agent discipline. Seven commitments make the pipeline resistant to the failure modes that collapse discipline-based research protocols.</p>
+<h2>Structural integrity: how the system resists self-deception</h2>
+<p>The RGDW's claim to produce defensible evidence rests on structural properties, not on agent discipline. Seven commitments reduce — but do not eliminate — the failure modes that collapse discipline-based research protocols.</p>
 
 <ol>
   <li><strong>Classifier and enforcer are different agents.</strong> The architect classifies; the conductor enforces. An agent that creates a BLOCK cannot clear it by reclassifying the decision as trivial — downgrades require explicit conductor approval with documented rationale.</li>
@@ -583,6 +583,14 @@ No prior system combines: (1) automated research triggered by decision classific
 </ol>
 
 <p>The composite effect: an adversary — or a lazy version of the engineer — cannot force a weak recommendation through the pipeline by holding any single role. Every gate has a different enforcer, every recommendation has an attacker, and every load-bearing claim has a fact-checker.</p>
+
+<h3>Known gameable paths</h3>
+<p>These structural commitments defend against accidental self-deception and low-effort gaming. Three paths remain open:</p>
+<ul>
+  <li><strong>Weak pre-registered search strings.</strong> The architect can encode bias in the disconfirming queries by choosing strings designed to return nothing. The system verifies that strings <em>exist</em>, not that they are <em>strong</em>. Future mitigation: a search-string quality heuristic that flags queries with zero results across multiple search engines.</li>
+  <li><strong>Single-principal bias.</strong> When one operator writes all agent specs, consistent biases can be encoded across architect, conductor, and red team. The structural separation is between agent instances, not between principals. Full mitigation requires a second human reviewing the specs — which is the same constraint the pipeline was designed to eliminate.</li>
+  <li><strong>Fact-check false positives.</strong> The fact-check agent verifies that URLs resolve and numbers appear in the source. But a hallucinated citation to a plausible-sounding paper may match a <em>different</em> real paper at a similar URL. Content-level verification (does the cited claim actually appear in the source text?) would close this gap but is not yet implemented.</li>
+</ul>
 </section>
 
 <!-- WORKFLOW -->
@@ -736,7 +744,7 @@ No prior system combines: (1) automated research triggered by decision classific
 </tbody>
 </table>
 </div>
-<p class="fig-caption"><strong>Figure 8.</strong> Post-implementation agent spec quality scores, Hervey 2026 15-dimension framework (270 points). B minimum is 203/270 (75.2%). The RGDW additions produced net improvements across all six specs with zero regressions. Architect and builder entered the session at D grade (161/270) from pre-existing gaps in eval infrastructure, trace schemas, and pass^k measurement — gaps unrelated to RGDW. All specs were brought to B minimum before the implementation was accepted as complete.</p>
+<p class="fig-caption"><strong>Figure 8.</strong> Post-implementation agent spec quality scores, Hervey 2026 15-dimension framework (270 points). B minimum is 203/270 (75.2%). The RGDW additions produced net improvements across all six specs with zero regressions. These scores are self-assessed using the companion evaluation framework (Hervey, 2026) and have not been independently validated by external evaluators. Architect and builder entered the session at D grade (161/270) from pre-existing gaps in eval infrastructure, trace schemas, and pass^k measurement — gaps unrelated to RGDW. All specs were brought to B minimum before the implementation was accepted as complete.</p>
 </div>
 
 <h3>7.2 · The improvement loop</h3>
@@ -781,13 +789,13 @@ The three D/C-grade specs were not failing because of RGDW. They were failing be
 <p>The RGDW is a production workflow, not a proven methodology. Six honest limitations bound its current claims.</p>
 
 <h3>Compute cost and time-cost</h3>
-<p>A T3 decision consumes ~4.5 hours of agent compute and an order of magnitude more tokens than an unaided decision. Published multi-agent research pipelines at industry labs report comparable overhead: roughly 15× the token usage of single-agent chat for equivalent queries, offset by a 90%+ improvement on research-eval tasks. Whether that tradeoff is worth it depends on the decision's irreversibility. For T3 decisions affecting system topology or security, yes. For T1 decisions, it would be indefensibly wasteful — which is why the classifier exists.</p>
+<p>A T3 decision consumes ~4.5 hours of agent compute and an order of magnitude more tokens than an unaided decision. Anthropic's multi-agent research system reports comparable overhead: approximately 15× the token usage of single-agent chat for equivalent queries, offset by a 90.2% improvement on internal research evals (Anthropic, June 2025). Whether that tradeoff is worth it depends on the decision's irreversibility. For T3 decisions affecting system topology or security, yes. For T1 decisions, it would be indefensibly wasteful — which is why the classifier exists.</p>
 
 <h3>Source-tier ceiling</h3>
 <p>Most real engineering decisions lack Tier 1 evidence. Peer-reviewed studies comparing production frameworks in deployed contexts do not exist for most framework choices. Practitioner tier evidence — corroborated migration reports, benchmarks with disclosed methodology — partially fills the gap, but it is structurally weaker. A decision cited 90% from practitioner sources is more fragile than one grounded in peer-reviewed benchmarks. The schema surfaces this weakness; it cannot eliminate it.</p>
 
 <h3>LLM research agents have their own biases</h3>
-<p>Recall biases in search-indexed content, recency biases in training data, SEO-optimized farm content crowding out authoritative sources — these are documented failure modes of LLM-based research. Published post-mortems from multi-agent research pipelines note that early agents <em>"consistently chose SEO-optimized content farms over authoritative but less highly-ranked sources like academic PDFs."</em> RGDW's source-tier schema and fact-check firewall mitigate but do not eliminate this class of error.</p>
+<p>Recall biases in search-indexed content, recency biases in training data, SEO-optimized farm content crowding out authoritative sources — these are documented failure modes of LLM-based research. Anthropic reports that early versions of their multi-agent research system <em>"consistently chose SEO-optimized content farms over authoritative but less highly-ranked sources like academic PDFs"</em> (Anthropic, "How We Built Our Multi-Agent Research System," June 2025). RGDW's source-tier schema and fact-check firewall mitigate but do not eliminate this class of error.</p>
 
 <h3>The system accelerates expertise, not replaces it</h3>
 <p>Domain expertise comes from reviewing decisions, not from avoiding them. The auto-generated decision summaries persisted to the KB, and the domain-expertise tracker that gates the T3→T2 transition, are designed to compound learning — but the operator still has to read the summaries. A decision stack accumulated without review is not expertise; it is a queue of unread mail.</p>
@@ -811,7 +819,7 @@ The three D/C-grade specs were not failing because of RGDW. They were failing be
 <section id="conclusion" class="fade-in">
 <h2>Conclusion</h2>
 <p>The self-taught gap is real, but it is not a discipline problem. Attempts to solve it with better intentions collapse under decision volume and confirmation bias. The RGDW's wager is that <strong>research quality comes from structure, not discipline</strong> — that adversarial agents, pre-registered searches, separate enforcers, and BLOCK-level gates produce better evidence trails than willpower ever could.</p>
-<p>The deeper insight is this: evidence trails are not just for defense. Bad ideas die in red team before they become code. A recommendation that has already survived a HIGH-confidence attack is a <em>better</em> recommendation, not just a more-documented one. The pipeline's output is not paperwork — it is architecturally-improved decisions.</p>
+<p>The deeper insight is this: evidence trails are not just for defense. Some bad ideas die in red team before they become code — though the red team's effectiveness is bounded by the model's domain knowledge and the quality of the pre-registered attack queries. A recommendation that has already survived a HIGH-confidence attack is a <em>better</em> recommendation, not just a more-documented one. The pipeline's output is not paperwork — it is architecturally-improved decisions.</p>
 <p>The agent fleet operating under RGDW constraints <em>is</em> the methodology in action. Every classification, every gate, every fact-check is executed by an agent with a bounded role and no permission to bypass. The operator reviews conclusions; the structure does the rest.</p>
 <p>For self-taught engineers building production AI systems, the question is no longer <em>"will I have time to do the research?"</em> It is <em>"does my workflow make research a bottleneck or a background process?"</em> The RGDW answers the second question structurally — and, in doing so, closes the gap between what a self-taught engineer can build and what they can defend.</p>
 </section>
@@ -822,7 +830,7 @@ The three D/C-grade specs were not failing because of RGDW. They were failing be
 
 <h3>Primary data</h3>
 <ol>
-  <li>Hervey, A. "Responsibility Taxonomy — AI Agent Architect / Systems Engineer Roles." Primary data: 93+ job descriptions across 12 companies, grounded-theory coded per Strauss &amp; Corbin (1998). April 2026.</li>
+  <li>Hervey, A. "Responsibility Taxonomy — AI Agent Architect / Systems Engineer Roles." Primary data: 93+ job descriptions across 12 companies, content-analyzed for research-capability requirements. April 2026.</li>
   <li>Hervey, A. "A Practitioner's Framework for Evaluating Production AI Agents." Companion paper. April 2026.</li>
 </ol>
 
@@ -855,8 +863,8 @@ The three D/C-grade specs were not failing because of RGDW. They were failing be
 <h3>Empirical findings on multi-agent systems</h3>
 <ol start="17">
   <li>Kim, Y. et al. "Towards a Science of Scaling Agent Systems." arXiv:2512.08296, December 2025.</li>
-  <li>Cemri, M. et al. "Multi-Agent System Failure Taxonomy (MAST)." NeurIPS 2025 Spotlight, 2025.</li>
-  <li>Rabanser, S. et al. "AI Agent Reliability." Princeton, arXiv, 2026.</li>
+  <li>Cemri, M. et al. "Why Do Multi-Agent LLM Systems Fail?" NeurIPS 2025 Datasets &amp; Benchmarks Spotlight. arXiv:2503.13657, 2025.</li>
+  <li>Rabanser, S. et al. "Towards a Science of AI Agent Reliability." Princeton University, 2026. arXiv:2602.16666.</li>
   <li>Yao, S. et al. "τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains." Sierra Research, arXiv:2406.12045, 2024.</li>
   <li>Cao, H. et al. "Beyond Task Completion: Revealing Corrupt Success in LLM Agents." arXiv:2603.03116, March 2026.</li>
 </ol>
